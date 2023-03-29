@@ -35,7 +35,11 @@ function Login() {
     event.preventDefault();
 
     try {
-      await requestLogin({ email, password });
+      const user = await requestLogin({ email, password });
+      localStorage.setItem(
+        'user',
+        JSON.stringify(user),
+      );
       setIsLoged(true);
     } catch (error) {
       setFailedTryLogin(true);
