@@ -1,6 +1,6 @@
-import { listen } from './app';
-
 const port = process.env.PORT || 3001;
 
-listen(port);
+const app = require('./app');
+
+app.listen(port);
 console.log(`Api rodando na porta ${port}`);
