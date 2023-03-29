@@ -10,4 +10,6 @@ app.get('/coffee', (_req, res) => res.status(418).end());
 
 app.post('/login', user.loginUser);
 
+app.post('/register', user.registerUser);
+
 module.exports = app;

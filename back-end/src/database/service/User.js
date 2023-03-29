@@ -13,4 +13,16 @@ const loginUser = async (email, password) => {
   }
   return { message: 'User Find' };
 };
-module.exports = { loginUser };
+
+const registerUser = async (name, email, password, role) => {
+  const user = await User.findOne({
+    where: { email, name },
+  });
+  if (user) {
+    return { type: 'error', message: 'User already registered' };
+  }
+
+  await User.create({ name, email, password, role });
+  return { message: 'User Created' };
+};
+module.exports = { loginUser, registerUser };
