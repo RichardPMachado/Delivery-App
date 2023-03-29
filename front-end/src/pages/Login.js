@@ -1,9 +1,12 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useHistory, Link } from 'react-router-dom';
+import { requestLogin } from '../services/request';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoged, setIsLoged] = useState(false);
+  const [failedTryLogin, setFailedTryLogin] = useState(false);
 
   const handleEmail = ({ target }) => {
     setEmail(target.value);
@@ -22,7 +25,29 @@ function Login() {
       || password === ''
       || email === '');
   });
+  const history = useHistory();
 
+  const redirect = (pathName) => {
+    history.push(`/${pathName}`);
+  };
+
+  const login = async (event) => {
+    event.preventDefault();
+
+    try {
+      await requestLogin({ email, password });
+      setIsLoged(true);
+    } catch (error) {
+      setFailedTryLogin(true);
+      setIsLoged(false);
+    }
+  };
+
+  useEffect(() => {
+    setFailedTryLogin(false);
+  }, [email, password]);
+
+  if (isLoged) redirect('customer/products');
   return (
     <div>
       <h1> Login </h1>
@@ -51,11 +76,19 @@ function Login() {
           onChange={ handlePassword }
         />
       </label>
-
+      {
+        (failedTryLogin)
+          ? (
+            <p data-testid="common_login__element-invalid-email">
+              Senha ou e-mail não encontrado.
+            </p>
+          )
+          : null
+      }
       <button
         data-testid="common_login__button-login"
         type="button"
-        onClick={ () => {} }
+        onClick={ (event) => login(event) }
         disabled={ formeValidate() }
       >
         Login
