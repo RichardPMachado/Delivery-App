@@ -13,27 +13,26 @@ import Admin from './pages/Admin';
 function App() {
   return (
     <BrowserRouter>
-    <Switch>
-    <Route exact path="/" render={ () => <Redirect to="/login"/> } />
-     <Route exact path="/login" component={ Login } />
+      <Switch>
+        <Route exact path="/" render={ () => <Redirect to="/login" /> } />
+        <Route exact path="/login" component={ Login } />
 
-     <Route exact path="/register" component={ Register } />
+        <Route exact path="/register" component={ Register } />
 
-     <Route exact path="/customer/products" component={ Products } />
+        <Route exact path="/customer/products" component={ Products } />
 
-     <Route exact path="/customer/checkout" component={ Checkout } />
+        <Route exact path="/customer/checkout" component={ Checkout } />
 
-     <Route exact path="/customer/orders/:id" component={ Orders } />
-     <Route exact path="/customer/orders" component={ Orders } />
+        <Route exact path="/customer/orders/:id" component={ Orders } />
+        <Route exact path="/customer/orders" component={ Orders } />
 
-     <Route exact path="/seller/orders" component={ Seller } />
-     <Route exact path="/seller/orders/:id" component={ Seller } />
+        <Route exact path="/seller/orders" component={ Seller } />
+        <Route exact path="/seller/orders/:id" component={ Seller } />
 
-     <Route exact path="/admin/manage" component={ Admin } />
+        <Route exact path="/admin/manage" component={ Admin } />
 
-    </Switch>
+      </Switch>
     </BrowserRouter>
-    
 
   );
 }
