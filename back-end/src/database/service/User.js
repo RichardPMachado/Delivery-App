@@ -1,28 +1,16 @@
+const md5 = require('md5');
 const { User } = require('../models');
-const md5 = require('md5')
-
-const registerUser = async (user, email, password) => {
-  const users = await User.findOne({
-    where: { email },
-  });
-  if (users) {
-    return { type: 'error', message: 'Email already registered' };
-  }
-
-  await User.create({ user, email, password });
-  return { message: 'User Created' };
-};
 
 const loginUser = async (email, password) => {
-  const hashedPassword = mds(password)
+  const hashedPassword = md5(password);
 
   const user = await User.findOne({
-    where: { email, hashedPassword },
+    where: { email, password: hashedPassword },
   });
   
   if (!user) {
-    return null;
+    return { type: null, message: 'User Not Found' };
   }
   return { message: 'User Find' };
 };
-module.exports = { registerUser, loginUser };
+module.exports = { loginUser };

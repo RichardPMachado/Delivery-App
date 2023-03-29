@@ -1,30 +1,16 @@
-const userService = require('../Services/User');
-
-const registerUser = async (req, res) => {
-  const { user, email, password } = req.body;
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  const { message, type } = await userService.registerUser(user, email, hashedPassword);
-
-  if (type) {
-    return res.status(409).json(message);
-  }
-console.log(message);
-  return res.status(201).json(message);
-};
+const userService = require('../service/User');
 
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
-  const register = await userService.loginUser(email, password);
+  const { type, message } = await userService.loginUser(email, password);
 
-  if (register === null) {
-    return res.status(404).json({ message: 'Not found' });
+  if (type === null) {
+    return res.status(404).json({ message });
   }
 
-  return res.status(201);
+  return res.status(201).json({ message });
 };
 module.exports = {
-    registerUser,
     loginUser,
 };
