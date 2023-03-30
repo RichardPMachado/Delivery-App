@@ -1,9 +1,10 @@
 const jwt = require('jsonwebtoken');
 
-const GenerateToken = (email, role) => {
+const GenerateToken = (name, email, role) => {
   const secret = process.env.MY_SECRET;
 
   const payload = { 
+    name,
     email,
     role,
   };
