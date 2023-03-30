@@ -1,4 +1,5 @@
 function Products() {
+  const logout = () => { localStorage.removeItem('user'); };
   return (
     <div>
       <h1>Products</h1>
@@ -6,5 +7,4 @@ function Products() {
     </div>
   );
 }
-
 export default Products;

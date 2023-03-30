@@ -51,7 +51,11 @@ function Register() {
     event.preventDefault();
 
     try {
-      await requestRegister({ name, email, password, role });
+      const user = await requestRegister({ name, email, password, role });
+      localStorage.setItem(
+        'user',
+        JSON.stringify(user),
+      );
 
       setIsRegister(true);
     } catch (error) {
