@@ -5,12 +5,13 @@ module.exports = (sequelize, DataTypes) => {
       id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
       name: { type: DataTypes.STRING, allowNull: false },
       
-      price: { type: DataTypes.INTEGER, allowNull: false }, 
+      price: { type: DataTypes.DECIMAL(10,2), allowNull: false }, 
       urlImage: { type: DataTypes.STRING, allowNull: false },
     },
   {
       timestamps: false,
       underscored: true,
+      force:true,
     },
   );
   
