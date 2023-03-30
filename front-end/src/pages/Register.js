@@ -63,8 +63,7 @@ function Register() {
     setFailedTryRegister(false);
   }, [email, password, name]);
 
-  if (isRegister) return redirect('customer/products');
-  if (failedTryRegister) return redirect('register');
+  if (isRegister) redirect('customer/products');
   return (
     <div>
       <h2>Register</h2>

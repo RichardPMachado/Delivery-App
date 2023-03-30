@@ -1,5 +1,6 @@
 const md5 = require('md5');
 const { User } = require('../models');
+const { GenerateToken } = require('../../utils/generateJwt');
 
 const loginUser = async (email, password) => {
   const hashedPassword = md5(password);
@@ -11,7 +12,12 @@ const loginUser = async (email, password) => {
   if (!user) {
     return { type: null, message: 'User Not Found' };
   }
-  return { message: 'User Find' };
+  const token = GenerateToken(email, user.role);
+  return { message: { 
+    name: user.name, 
+    email, 
+    role: user.role,
+    token } };
 };
 
 const registerUser = async (name, email, password, role) => {
