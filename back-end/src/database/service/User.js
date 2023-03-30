@@ -12,7 +12,7 @@ const loginUser = async (email, password) => {
   if (!user) {
     return { type: null, message: 'User Not Found' };
   }
-  const token = GenerateToken(user.name, email, user.role);
+  const token = await GenerateToken(user.name, email, user.role);
   return { message: { 
     name: user.name, 
     email, 
@@ -27,8 +27,13 @@ const registerUser = async (name, email, password, role) => {
   if (user) {
     return { type: 'error', message: 'User already registered' };
   }
-
+  const token = await GenerateToken(name, email, role);
   await User.create({ name, email, password, role });
-  return { message: 'User Created' };
+  return { message: {
+    name,
+    role,
+    email,
+    token },
+  };    
 };
 module.exports = { loginUser, registerUser };

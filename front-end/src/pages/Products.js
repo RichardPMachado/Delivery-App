@@ -1,9 +1,17 @@
 import { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+
 import ProductCard from '../components/ProductCard';
 import { requestProducts } from '../services/request';
 
-export default function Products() {
+function Products() {
   const [products, setProducts] = useState([]);
+  const history = useHistory();
+
+  const logout = () => {
+    localStorage.removeItem('user');
+    history.push('/login');
+  };
 
   const getProducts = async () => {
     const requestedProducts = await requestProducts();
@@ -32,7 +40,13 @@ export default function Products() {
           <span data-testid={ `${ROUTE}__${ELEMENT}-user-full-name` }>
             { name }
           </span>
-          <span data-testid={ `${ROUTE}__${ELEMENT}-link-logout` }>Sair</span>
+          <button
+            data-testid={ `${ROUTE}__${ELEMENT}-link-logout` }
+            type="button"
+            onClick={ logout }
+          >
+            Sair
+          </button>
         </nav>
       </header>
       <main>
@@ -48,3 +62,4 @@ export default function Products() {
     </>
   );
 }
+export default Products;
