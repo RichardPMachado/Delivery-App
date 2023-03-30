@@ -1,14 +1,25 @@
+import { useEffect, useState } from 'react';
 import ProductCard from '../components/ProductCard';
-// import { requestProducts } from '../services/request';
+import { requestProducts } from '../services/request';
 
-export default async function Products() {
+export default function Products() {
+  const [products, setProducts] = useState([]);
+
+  const getProducts = async () => {
+    const requestedProducts = await requestProducts();
+    setProducts(requestedProducts);
+  };
+
+  useEffect(() => {
+    getProducts();
+  }, []);
+
   const ROUTE = 'customer_products';
   const ELEMENT = 'element-navbar';
 
-  // const products = await requestProducts();
-  const products = [];
+  console.log(products);
 
-  const { name } = JSON.parse(localStorage.getItem('user'));
+  const { name } = JSON.parse(localStorage.getItem('user')) || { name: 'Usuário' };
 
   return (
     <>
