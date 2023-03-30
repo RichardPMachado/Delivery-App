@@ -12,7 +12,7 @@ const loginUser = async (email, password) => {
   if (!user) {
     return { type: null, message: 'User Not Found' };
   }
-  const token = GenerateToken(user.name, email, user.role);
+  const token = await GenerateToken(user.name, email, user.role);
   return { message: { 
     name: user.name, 
     email, 
