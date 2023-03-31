@@ -1,12 +1,16 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
+import replaceDotToComma from '../utils/replaceDotToComma';
 
 const ROUTE = 'customer_products';
 const ELEMENT = 'element-card';
-const IMAGE = 'image-card';
+const IMAGE = 'img-card';
 const BUTTON = 'button-card';
 const INPUT = 'input-card';
-export default function ProductCard({ product: { id, name, price, urlImage } }) {
+export default function ProductCard({
+  product: { id, name, price, urlImage },
+  updateCart,
+}) {
   const [quantity, setQuantity] = useState(0);
 
   const handleChangeQuantity = ({ target }) => {
@@ -18,16 +22,22 @@ export default function ProductCard({ product: { id, name, price, urlImage } }) 
     }
 
     setQuantity(newQuantity);
+
+    updateCart({ id, name, price, urlImage, quantity: newQuantity });
   };
 
   const incrementQuantity = () => {
     setQuantity(quantity + 1);
+
+    updateCart({ id, name, price, urlImage, quantity: quantity + 1 });
   };
 
   const decrementQuantity = () => {
     if (quantity === 0) return;
 
     setQuantity(quantity - 1);
+
+    updateCart({ id, name, price, urlImage, quantity: quantity - 1 });
   };
 
   return (
@@ -40,7 +50,7 @@ export default function ProductCard({ product: { id, name, price, urlImage } }) 
       <span
         data-testid={ `${ROUTE}__${ELEMENT}-price-${id}` }
       >
-        { price }
+        { replaceDotToComma(price) }
       </span>
       <img
         data-testid={ `${ROUTE}__${IMAGE}-bg-image-${id}` }
@@ -79,4 +89,5 @@ ProductCard.propTypes = {
     price: PropTypes.string.isRequired,
     urlImage: PropTypes.string.isRequired,
   }).isRequired,
+  updateCart: PropTypes.func.isRequired,
 };
