@@ -20,4 +20,6 @@ app.post('/register', user.registerUser);
 
 app.get('/products', products.getProducts);
 
+app.get('/users', user.getAllUsers);
+
 module.exports = app;

@@ -36,4 +36,8 @@ const registerUser = async (name, email, password, role) => {
     token },
   };    
 };
-module.exports = { loginUser, registerUser };
+const getAllUsers = async () => {
+  const users = await User.findAll();
+  return { users };
+}; 
+module.exports = { loginUser, registerUser, getAllUsers };
