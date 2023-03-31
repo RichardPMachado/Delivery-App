@@ -1,8 +1,22 @@
+import { useEffect, useState } from 'react';
+import { requestUsers } from '../services/request';
+
 function Checkout() {
+  const [cart, setCart] = useState(JSON.parse(localStorage.getItem('cart')));
+  const cartValue = localStorage.getItem('cartValue');
+
+  const [users, setUsers] = useState({ users: [] });
+
+  useEffect(() => {
+    const getUsers = async () => {
+      const requestedUsers = await requestUsers();
+      setUsers(requestedUsers);
+    };
+    getUsers();
+  }, [setUsers]);
   return (
     <>
       <table border="1">
-        {' '}
         <thead>
           <tr>
             <th>Item</th>
@@ -13,59 +27,81 @@ function Checkout() {
             <th>Remover Item</th>
           </tr>
         </thead>
-        {/*       <tbody>
-        {products.map((product, i) => (
-          <tr key={ i }>
-            <td>{product.id}</td>
-            <td>{product.name}</td>
-            <td>{product.quantify}</td>
-            <td>{product.valorUnity}</td>
-            <td>{product.totalValor}</td>
-            <td>
-              <button
-                type="button"
-                data-testid="edit-btn"
-                onClick={ () => { } }
-              >
-                Remover
-              </button>
-            </td>
-          </tr>
-        ))}
-      </tbody> */}
         <tbody>
-
-          <td
-            data-testid="customer_checkout__element-order-table-item-number-<index>"
-          >
-            teste1
-
-          </td>
-          <td data-testid="customer_checkout__element-order-table-name-<index>">
-            teste1
-          </td>
-          <td data-testid="customer_checkout__element-order-table-quantity-<index>">
-            teste1
-          </td>
-          <td data-testid="customer_checkout__element-order-table-unit-price-<index>">
-            teste1
-          </td>
-          <td data-testid="customer_checkout__element-order-table-sub-total-<index>">
-            teste1
-          </td>
-          <td>
-            <button
-              type="button"
-              onClick={ () => { } }
-              data-testid="customer_checkout__element-order-table-sub-total-<index>"
-            >
-              Remover
-            </button>
-          </td>
-
+          {cart.map((product, i) => (
+            <tr key={ product.id }>
+              <td
+                id={ product.id }
+                data-testid={
+                  `customer_checkout__element-order-table-item-number-${i}`
+                }
+              >
+                {i + 1}
+              </td>
+              <td
+                id={ product.id }
+                data-testid={ `customer_checkout__element-order-table-name-${i}` }
+              >
+                {product.name}
+              </td>
+              <td
+                id={ product.id }
+                data-testid={ `customer_checkout__element-order-table-quantity-${i}` }
+              >
+                { product.quantity }
+              </td>
+              <td
+                id={ product.id }
+                data-testid={ `customer_checkout__element-order-table-unit-price-${i}` }
+              >
+                {product.price.toString().replace('.', ',')}
+              </td>
+              <td
+                id={ product.id }
+                data-testid={ `customer_checkout__element-order-table-sub-total-${i}` }
+              >
+                {
+                  (product.quantity * product.price)
+                    .toFixed(2).toString().replace('.', ',')
+                }
+              </td>
+              <td>
+                <button
+                  type="button"
+                  id={ product.id }
+                  data-testid={ `customer_checkout__element-order-table-remove-${i}` }
+                  onClick={ (e) => {
+                    let newCartValue = parseFloat(cartValue);
+                    const newCart = cart.filter((p) => {
+                      const status = p.id !== Number(e.target.id);
+                      if (!status) newCartValue -= p.quantity * p.price;
+                      return status;
+                    });
+                    localStorage.setItem(
+                      'cartValue',
+                      newCartValue.toFixed(2),
+                    );
+                    console.log(newCart);
+                    localStorage.setItem(
+                      'cart',
+                      JSON.stringify(newCart),
+                    );
+                    setCart(newCart);
+                  } }
+                >
+                  Remover
+                </button>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
-      <div data-testid="customer_checkout__element-order-total-price">Total</div>
+      <div data-testid="customer_checkout__element-order-total-price">
+        {
+          parseFloat(cartValue).toFixed(2).toString().replace('.', ',')
+        }
+
+      </div>
       <button
         type="button"
         data-testid="customer_checkout__button-submit-order"
@@ -83,11 +119,8 @@ function Checkout() {
       <select
         data-testid="customer_checkout__select-seller"
       >
-        <option value="id">Alimentação</option>
-        <option value="id">Lazer</option>
-        <option value="id">Trabalho</option>
-        <option value="id">Transporte</option>
-        <option value="id">Saúde</option>
+        {users.users.map((user, i) => (
+          <option key={ i } value={ user.id }>{user.name}</option>))}
       </select>
     </>
   );

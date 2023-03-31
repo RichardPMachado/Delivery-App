@@ -21,4 +21,9 @@ export const requestProducts = async () => {
   return data;
 };
 
+export const requestUsers = async () => {
+  const { data } = await api.get('/users');
+  return data;
+};
+
 export default api;
