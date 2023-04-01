@@ -1,11 +1,21 @@
 import { useEffect, useState } from 'react';
-import { requestUsers } from '../services/request';
+import { useHistory } from 'react-router-dom';
+import { requestUsers, requestNewSale, setToken } from '../services/request';
+
+/* const jwt = require('jsonwebtoken'); */
 
 function Checkout() {
   const [cart, setCart] = useState(JSON.parse(localStorage.getItem('cart')));
   const cartValue = localStorage.getItem('cartValue');
+  const { token } = JSON.parse(localStorage.getItem('user'));
+  const { email } = JSON.parse(localStorage.getItem('user'));
 
   const [users, setUsers] = useState({ users: [] });
+  const [deliveryAddress, setdeliveryAddress] = useState('');
+  const [deliveryNumber, setdeliveryNumber] = useState('');
+  const [selectValue, setSelectValue] = useState(1);
+
+  const history = useHistory();
 
   useEffect(() => {
     const getUsers = async () => {
@@ -14,6 +24,34 @@ function Checkout() {
     };
     getUsers();
   }, [setUsers]);
+
+  const handledeliveryAddress = ({ target }) => {
+    setdeliveryAddress(target.value);
+  };
+
+  const handledeliveryNumber = ({ target }) => {
+    setdeliveryNumber(target.value);
+  };
+
+  const newSale = async (event) => {
+    event.preventDefault();
+
+    try {
+      setToken(token);
+      const order = await requestNewSale(
+        {
+          email,
+          sellerId: selectValue,
+          totalPrice: parseFloat(cartValue).toFixed(2),
+          deliveryAddress,
+          deliveryNumber },
+      );
+      history.push(`/customer/orders/${order.id}`);
+      console.log(order);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       <table border="1">
@@ -105,19 +143,26 @@ function Checkout() {
       <button
         type="button"
         data-testid="customer_checkout__button-submit-order"
+        onClick={ (event) => newSale(event) }
       >
         Finalizar Pedido
       </button>
       <input
         type="text"
         data-testid="customer_checkout__input-address"
+        value={ deliveryAddress }
+        onChange={ handledeliveryAddress }
       />
       <input
-        type="number"
+        type="text"
         data-testid="customer_checkout__input-address-number"
+        value={ deliveryNumber }
+        onChange={ handledeliveryNumber }
       />
       <select
         data-testid="customer_checkout__select-seller"
+        value={ selectValue }
+        onChange={ (e) => setSelectValue(e.target.value) }
       >
         {users.users.map((user, i) => (
           <option key={ i } value={ user.id }>{user.name}</option>))}

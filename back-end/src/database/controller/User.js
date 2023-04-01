@@ -24,17 +24,25 @@ const registerUser = async (req, res) => {
   if (type) {
     return res.status(409).json(message);
   }
-console.log(message);
   return res.status(201).json(message);
 };
 
-const getAllUsers = async (_req, res) => {
+const getAllUsers = async (req, res) => {
   const users = await userService.getAllUsers();
-
   return res.status(200).json(users);
+};
+
+const GetUserByEmail = async (req, res) => {
+  const { email } = req.body;
+  const {type, message} = await userService.GetUserByEmail(email);
+  if (type === null){
+    return  res.status(404).json(message);
+  }
+  return res.status(200).json(message);
 };
 module.exports = {
     loginUser,
     registerUser,
     getAllUsers,
+    GetUserByEmail,
 };

@@ -26,4 +26,18 @@ export const requestUsers = async () => {
   return data;
 };
 
+export const setToken = (token) => {
+  api.defaults.headers.common.authorization = token;
+};
+
+export const requestNewSale = async (
+  { email, sellerId, totalPrice, deliveryAddress, deliveryNumber },
+) => {
+  const { data } = await api.post(
+    '/customer/checkout',
+    { email, sellerId, totalPrice, deliveryAddress, deliveryNumber },
+  );
+  return data;
+};
+
 export default api;
