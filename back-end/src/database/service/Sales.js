@@ -1,5 +1,4 @@
-const { Sale } = require('../models');
-const { User } = require('../models');
+const { Sale, User, SalesProduct } = require('../models');
 
 // const { CustomError } = require('../errors/custom.error');
 
@@ -33,7 +32,14 @@ const createSale = async (sale) => {
       status: 'Pendente',
     },
   );
-  console.log(newSale);
+  const a = sale.teste.map( async (e) => { await SalesProduct.create(
+    {
+      saleId: newSale.id,
+      productId: e.productId,
+      quantity: e.productQuantity,
+    },
+  );})
+  Promise.all(a); 
   if (!newSale) return { type: null, message: 'n' };
   return { type: 201, message: newSale };
 } catch(err) {
