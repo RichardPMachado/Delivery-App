@@ -1,13 +1,15 @@
 const { Router } = require('express');
 
-// const { User } = require('../database/controller');
+const { SalesController } = require('../database/controller');
+
+const jwtValidation = require('../utils/jwt.validation');
 
 const router = Router();
 
-// router.post('/login', User.loginUser);
+router.get('/sales', SalesController.getAllSales);
 
-// router.post('/register', User.registerUser);
+router.get('/sales:id', SalesController.getSaleById);
 
-// router.get('/register', User.getAllUsers);
+router.post('/customer/checkout', jwtValidation, SalesController.createSale);
 
 module.exports = router;

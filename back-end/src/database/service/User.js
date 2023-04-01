@@ -40,4 +40,16 @@ const getAllUsers = async () => {
   const users = await User.findAll();
   return { users };
 }; 
-module.exports = { loginUser, registerUser, getAllUsers };
+
+const GetUserByEmail = async (email) => {
+
+  const user = await User.findOne({
+    where: { email },
+  });
+  
+  if (!user) {
+    return { type: null, message: 'User Not Found' };
+  }
+  return { message:  user  };
+};
+module.exports = { loginUser, registerUser, getAllUsers, GetUserByEmail };

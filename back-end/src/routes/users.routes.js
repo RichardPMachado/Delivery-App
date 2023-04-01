@@ -10,4 +10,6 @@ router.post('/register', UserController.registerUser);
 
 router.get('/users', UserController.getAllUsers);
 
+router.get('/user', UserController.GetUserByEmail);
+
 module.exports = router;
