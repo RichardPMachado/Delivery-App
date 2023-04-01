@@ -31,11 +31,11 @@ export const setToken = (token) => {
 };
 
 export const requestNewSale = async (
-  { email, sellerId, totalPrice, deliveryAddress, deliveryNumber },
+  { email, sellerId, totalPrice, deliveryAddress, deliveryNumber, teste },
 ) => {
   const { data } = await api.post(
     '/customer/checkout',
-    { email, sellerId, totalPrice, deliveryAddress, deliveryNumber },
+    { email, sellerId, totalPrice, deliveryAddress, deliveryNumber, teste },
   );
   return data;
 };

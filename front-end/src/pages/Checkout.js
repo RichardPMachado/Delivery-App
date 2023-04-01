@@ -38,13 +38,19 @@ function Checkout() {
 
     try {
       setToken(token);
+      const teste = cart.map((p) => {
+        const productId = p.id;
+        const productQuantity = p.quantity;
+        return { productId, productQuantity };
+      });
       const order = await requestNewSale(
         {
           email,
           sellerId: selectValue,
           totalPrice: parseFloat(cartValue).toFixed(2),
           deliveryAddress,
-          deliveryNumber },
+          deliveryNumber,
+          teste },
       );
       history.push(`/customer/orders/${order.id}`);
       console.log(order);
