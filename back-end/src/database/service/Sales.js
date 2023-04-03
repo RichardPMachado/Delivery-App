@@ -1,17 +1,30 @@
-const { Sale, User, SalesProduct } = require('../models');
+const { Sale, User, SalesProduct, Product } = require('../models');
 
 // const { CustomError } = require('../errors/custom.error');
 
-const getAllSales = async () => { 
+/* const getAllSales = async () => { 
   const sales = await Sale.findAll();
   if (!sales) return { type: null, message: 'Sales Error' };
   return { type: 204, message: sales };
-};
+}; */
 
-const getSaleById = async (saleId) => {
- const sale = await Sale.findByPk(saleId);
+const getAllSales = async () => {
+  const sales = await Sale.findAll();
+  return { sales };
+}; 
+
+const getSaleById = async (id) => {
+ const sale = await Sale.findByPk(id);
+ const seller = await User.findByPk(sale.sellerId);
+ const salesProducts = await SalesProduct.findAll({where: { saleId: sale.id },})
+ const products = await Promise.all(salesProducts.map( async (e) => ( await Product.findByPk(e.productId))))
+ console.log(products);
  if (!sale) return { type: null, message: 'Sale not found' };
- return { type: 204, message: sale };
+ return { type: 200, message: {
+  sale,
+  seller,
+  salesProducts,
+  products }, };
 };
 
 const createSale = async (sale) => {
@@ -47,8 +60,16 @@ const createSale = async (sale) => {
 }
 };
 
+const attSale = async (id, status) => {
+  await Sale.update({ status }, { where: { id } }); 
+  const updatedSale = await Sale.findByPk(id);
+
+   return (updatedSale);
+};
+
 module.exports = {
   getSaleById,
   getAllSales,
   createSale,
+  attSale,
 };

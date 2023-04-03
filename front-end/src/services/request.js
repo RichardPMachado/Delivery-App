@@ -4,8 +4,8 @@ const api = axios.create({
   baseURL: `http://localhost:${process.env.REACT_APP_API_PORT || '3001'}`,
 });
 
-export const requestRegister = async ({ name, email, password, role }) => {
-  const { data } = await api.post('/register', { name, email, password, role });
+export const requestRegister = async ({ name, email, password }) => {
+  const { data } = await api.post('/register', { name, email, password });
 
   return data;
 };
@@ -23,6 +23,21 @@ export const requestProducts = async () => {
 
 export const requestUsers = async () => {
   const { data } = await api.get('/users');
+  return data;
+};
+
+export const requestSales = async () => {
+  const { data } = await api.get('/sales');
+  return data;
+};
+
+export const requestSaleById = async (id) => {
+  const { data } = await api.get(`/sale/${id}`);
+  return data;
+};
+
+export const attSale = async (id, { status }) => {
+  const { data } = await api.put(`/sale/${id}`, { status });
   return data;
 };
 

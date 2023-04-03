@@ -5,7 +5,7 @@ import { requestLogin } from '../services/request';
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isLoged, setIsLoged] = useState(false);
+  const [userRole, setUserRole] = useState('');
   const [failedTryLogin, setFailedTryLogin] = useState(false);
 
   const handleEmail = ({ target }) => {
@@ -40,10 +40,10 @@ function Login() {
         'user',
         JSON.stringify(user),
       );
-      setIsLoged(true);
+      const { role } = JSON.parse(localStorage.getItem('user'));
+      setUserRole(role);
     } catch (error) {
       setFailedTryLogin(true);
-      setIsLoged(false);
     }
   };
 
@@ -51,7 +51,8 @@ function Login() {
     setFailedTryLogin(false);
   }, [email, password]);
 
-  if (isLoged) redirect('customer/products');
+  if (userRole === 'seller') redirect('seller/orders');
+  if (userRole === 'customer') redirect('customer/products');
   return (
     <div>
       <h1> Login </h1>

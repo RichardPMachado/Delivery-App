@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 
 import ProductCard from '../components/ProductCard';
 import { requestProducts } from '../services/request';
@@ -72,24 +72,31 @@ function Products() {
 
   return (
     <>
-      <header>
-        <nav>
-          <span data-testid={ `${ROUTE}__${ELEMENT}-link-products` }>Produtos</span>
-          <span data-testid={ `${ROUTE}__${ELEMENT}-link-orders` }>
-            Meus Pedidos
-          </span>
-          <span data-testid={ `${ROUTE}__${ELEMENT}-user-full-name` }>
-            { name }
-          </span>
-          <button
-            data-testid={ `${ROUTE}__${ELEMENT}-link-logout` }
-            type="button"
-            onClick={ logout }
-          >
-            Sair
-          </button>
-        </nav>
-      </header>
+      <nav>
+        <Link
+          data-testid={ `${ROUTE}__${ELEMENT}-link-products` }
+          to="/customer/products"
+        >
+          Produtos
+
+        </Link>
+        <Link
+          data-testid={ `${ROUTE}__${ELEMENT}-link-orders` }
+          to="/customer/orders"
+        >
+          Meus Pedidos
+        </Link>
+        <span data-testid={ `${ROUTE}__${ELEMENT}-user-full-name` }>
+          { name }
+        </span>
+        <Link
+          to="/login"
+          data-testid={ `${ROUTE}__${ELEMENT}-link-logout` }
+          onClick={ logout }
+        >
+          Sair
+        </Link>
+      </nav>
       <main>
         {
           products.map((product) => (
