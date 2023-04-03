@@ -2,19 +2,26 @@ const { SaleService } = require('../service');
 
 // const { CustomError } = require('../errors/custom.error');
 
-const getAllSales = async (_req, res) => {
+/* const getAllSales = async (_req, res) => {
   const { type, message } = await SaleService.getAllSales();
   if (type === null) {
     return res.status(404).json({ message });
   }
   return res.status(type).json({ message });
+}; */
+
+const getAllSales = async (_req, res) => {
+  const sales = await SaleService.getAllSales();
+  return res.status(200).json(sales);
 };
+
 
 const getSaleById = async (req, res) => {
   const { id } = req.params;
+  console.log("AQUI", id)
   const { type, message } = await SaleService.getSaleById(id);
   if (type === null) return res.status(404).json({ message });
-  return res.status(type).json({ message });
+  return res.status(type).json(message);
 };
 
 const createSale = async (req, res) => {
@@ -25,8 +32,18 @@ const createSale = async (req, res) => {
   return res.status(type).json(message);
 };
 
+const attSale = async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+  console.log("TESTA", status);
+  const newSale = await SaleService.attSale(id, status);
+
+  return res.status(200).json(newSale);
+};
+
 module.exports = {
   getAllSales,
   getSaleById,
   createSale,
+  attSale,
 };

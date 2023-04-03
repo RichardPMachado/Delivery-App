@@ -15,9 +15,7 @@ function Register() {
 
   const [name, setName] = useState('');
 
-  const [role, setRole] = useState('');
-
-  const [isRegister, setIsRegister] = useState(false);
+  const [userRole, setUserRole] = useState('false');
 
   const [failedTryRegister, setFailedTryRegister] = useState(false);
 
@@ -31,10 +29,6 @@ function Register() {
 
   const handlePassword = ({ target }) => {
     setPassword(target.value);
-  };
-
-  const handleRole = ({ target }) => {
-    setRole(target.value);
   };
 
   const formValidation = () => {
@@ -51,23 +45,24 @@ function Register() {
     event.preventDefault();
 
     try {
-      const user = await requestRegister({ name, email, password, role });
+      const user = await requestRegister({ name, email, password });
       localStorage.setItem(
         'user',
         JSON.stringify(user),
       );
-
-      setIsRegister(true);
+      const userLocalStorage = localStorage.getItem('user');
+      const userObject = JSON.parse(userLocalStorage);
+      setUserRole(userObject.role);
     } catch (error) {
       setFailedTryRegister(true);
-      setIsRegister(false);
     }
   };
   useEffect(() => {
     setFailedTryRegister(false);
   }, [email, password, name]);
 
-  if (isRegister) redirect('customer/products');
+  if (userRole === 'customer') redirect('customer/products');
+  if (userRole === 'seller') redirect('seller/orders');
   return (
     <div>
       <h2>Register</h2>
@@ -103,16 +98,6 @@ function Register() {
           name="password"
           value={ password }
           onChange={ handlePassword }
-        />
-      </label>
-      <label htmlFor="role">
-        Role
-        <input
-          type="text"
-          id="role"
-          name="role"
-          value={ role }
-          onChange={ handleRole }
         />
       </label>
 

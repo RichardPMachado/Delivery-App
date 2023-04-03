@@ -15,11 +15,11 @@ const loginUser = async (req, res) => {
 
 const registerUser = async (req, res) => {
   const { body } = req;
-  const { name, email, role } = body;
+  const { name, email } = body;
   const password = md5(body.password);
 
   const { message, type } = await 
-  userService.registerUser(name, email, password, role);
+  userService.registerUser(name, email, password);
 
   if (type) {
     return res.status(409).json(message);
@@ -40,6 +40,7 @@ const GetUserByEmail = async (req, res) => {
   }
   return res.status(200).json(message);
 };
+
 module.exports = {
     loginUser,
     registerUser,

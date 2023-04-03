@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { requestUsers, requestNewSale, setToken } from '../services/request';
 
 /* const jwt = require('jsonwebtoken'); */
@@ -7,8 +7,9 @@ import { requestUsers, requestNewSale, setToken } from '../services/request';
 function Checkout() {
   const [cart, setCart] = useState(JSON.parse(localStorage.getItem('cart')));
   const cartValue = localStorage.getItem('cartValue');
-  const { token } = JSON.parse(localStorage.getItem('user'));
-  const { email } = JSON.parse(localStorage.getItem('user'));
+  const { name, email, token } = JSON.parse(localStorage.getItem('user'));
+  const ROUTE = 'customer_products';
+  const ELEMENT = 'element-navbar';
 
   const [users, setUsers] = useState({ users: [] });
   const [deliveryAddress, setdeliveryAddress] = useState('');
@@ -16,6 +17,11 @@ function Checkout() {
   const [selectValue, setSelectValue] = useState(1);
 
   const history = useHistory();
+
+  const logout = () => {
+    localStorage.removeItem('user');
+    history.push('/login');
+  };
 
   useEffect(() => {
     const getUsers = async () => {
@@ -60,6 +66,30 @@ function Checkout() {
   };
   return (
     <>
+      <nav>
+        <Link
+          data-testid={ `${ROUTE}__${ELEMENT}-link-products` }
+          to="/customer/products"
+        >
+          Produtos
+        </Link>
+        <Link
+          data-testid={ `${ROUTE}__${ELEMENT}-link-orders` }
+          to="/customer/orders"
+        >
+          Meus Pedidos
+        </Link>
+        <span data-testid={ `${ROUTE}__${ELEMENT}-user-full-name` }>
+          { name }
+        </span>
+        <Link
+          to="/login"
+          data-testid={ `${ROUTE}__${ELEMENT}-link-logout` }
+          onClick={ logout }
+        >
+          Sair
+        </Link>
+      </nav>
       <table border="1">
         <thead>
           <tr>
@@ -166,6 +196,7 @@ function Checkout() {
         onChange={ handledeliveryNumber }
       />
       <select
+        type="input"
         data-testid="customer_checkout__select-seller"
         value={ selectValue }
         onChange={ (e) => setSelectValue(e.target.value) }

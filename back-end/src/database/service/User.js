@@ -20,18 +20,21 @@ const loginUser = async (email, password) => {
     token } };
 };
 
-const registerUser = async (name, email, password, role) => {
+const registerUser = async (name, email, password) => {
+  const verifyUser = await User.findOne({
+    where: { email, name },
+  });
+  if (verifyUser) {
+    return { type: 'error', message: 'User already registered' };
+  }
+  const token = await GenerateToken(name, email);
+  await User.create({ name, email, password, role: "customer" });
   const user = await User.findOne({
     where: { email, name },
   });
-  if (user) {
-    return { type: 'error', message: 'User already registered' };
-  }
-  const token = await GenerateToken(name, email, role);
-  await User.create({ name, email, password, role });
   return { message: {
     name,
-    role,
+    role: user.role,
     email,
     token },
   };    
