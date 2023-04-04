@@ -44,7 +44,7 @@ function Checkout() {
 
     try {
       setToken(token);
-      const teste = cart.map((p) => {
+      const products = cart.map((p) => {
         const productId = p.id;
         const productQuantity = p.quantity;
         return { productId, productQuantity };
@@ -56,7 +56,7 @@ function Checkout() {
           totalPrice: parseFloat(cartValue).toFixed(2),
           deliveryAddress,
           deliveryNumber,
-          teste },
+          products },
       );
       history.push(`/customer/orders/${order.id}`);
       console.log(order);

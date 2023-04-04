@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 import PropTypes from 'prop-types';
 import { requestSaleById, attSale } from '../services/request';
 
-function SellerOrdersDetails({ match: { params: { id } } }) {
+function OrdersDetails({ match: { params: { id } } }) {
   const { name } = JSON.parse(localStorage.getItem('user'));
   const history = useHistory();
   /* const path = window.location.pathname.split('/'); */
@@ -17,7 +17,6 @@ function SellerOrdersDetails({ match: { params: { id } } }) {
   const date = (sale && sale.sale && sale.sale.saleDate)
     ? format(new Date(sale.sale.saleDate), 'dd/MM/yyy') : null;
 
-  const inTransity = 'Em Trânsito';
   const inPrepair = 'Preparando';
   const delivered = 'Entregue';
   const pending = 'Pendente';
@@ -25,14 +24,9 @@ function SellerOrdersDetails({ match: { params: { id } } }) {
   const ROUTE = 'customer_products';
   const ELEMENT = 'element-navbar';
 
-  const buttonPrepairValidate = (() => {
+  const buttonDeliveredValidate = (() => {
     if (status === delivered
-    || status === inTransity || status === inPrepair) { return true; }
-  });
-
-  const buttonTransityValidate = (() => {
-    if (status === delivered
-    || status === inTransity || status === pending) { return true; }
+        || status === pending || status === inPrepair) { return true; }
   });
 
   const getSaleAndUser = async () => {
@@ -45,21 +39,11 @@ function SellerOrdersDetails({ match: { params: { id } } }) {
     history.push('/login');
   };
 
-  const attSalePrepair = async (event) => {
+  const attSaleDelivered = async (event) => {
     event.preventDefault();
 
     try {
-      await attSale(id, { status: inPrepair });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const attSaleTransity = async (event) => {
-    event.preventDefault();
-
-    try {
-      await attSale(id, { status: inTransity });
+      await attSale(id, { status: delivered });
     } catch (error) {
       console.log(error);
     }
@@ -72,9 +56,18 @@ function SellerOrdersDetails({ match: { params: { id } } }) {
   return (
     <>
       <nav>
-        <span data-testid={ `${ROUTE}__${ELEMENT}-link-orders` }>
-          Pedidos
-        </span>
+        <Link
+          data-testid={ `${ROUTE}__${ELEMENT}-link-products` }
+          to="/customer/products"
+        >
+          Produtos
+        </Link>
+        <Link
+          data-testid={ `${ROUTE}__${ELEMENT}-link-orders` }
+          to="/customer/orders"
+        >
+          Meus Pedidos
+        </Link>
         <span data-testid={ `${ROUTE}__${ELEMENT}-user-full-name` }>
           { name }
         </span>
@@ -91,7 +84,7 @@ function SellerOrdersDetails({ match: { params: { id } } }) {
       <label htmlFor="sale_information">
         <section id="sale_information">
           <span
-            data-testid="seller_order_details__element-order-details-label-order-id"
+            data-testid="customer_order_details__element-order-details-label-order-id"
           >
             Pedido
             {id}
@@ -99,15 +92,22 @@ function SellerOrdersDetails({ match: { params: { id } } }) {
           <br />
           <br />
           <span
-            data-testid="seller_order_details__element-order-details-label-order-date"
+            data-testid="customer_order_details__element-order-details-label-seller-name"
+          >
+            {sale && sale.seller && sale.seller.name}
+          </span>
+          <br />
+          <br />
+          <span
+            data-testid="customer_order_details__element-order-details-label-order-date"
           >
             {!!date && date}
           </span>
           <br />
           <br />
           <span
-            data-testid={ 'seller_order_details__element'
-            + '-order-details-label-delivery-status' }
+            data-testid={ 'customer_order_details__element-order-details-'
+            + 'label-delivery-status<index>' }
           >
             {status}
           </span>
@@ -115,20 +115,11 @@ function SellerOrdersDetails({ match: { params: { id } } }) {
       </label>
       <button
         type="button"
-        data-testid="seller_order_details__button-preparing-check"
-        onClick={ (event) => attSalePrepair(event) }
-        disabled={ buttonPrepairValidate() }
+        data-testid="customer_order_details__button-delivery-check"
+        onClick={ (event) => attSaleDelivered(event) }
+        disabled={ buttonDeliveredValidate() }
       >
-        Preparar Pedido
-
-      </button>
-      <button
-        data-testid="seller_order_details__button-dispatch-check"
-        type="button"
-        onClick={ (event) => attSaleTransity(event) }
-        disabled={ buttonTransityValidate() }
-      >
-        Saiu Para Entrega
+        Marcar Como Entregue
 
       </button>
       <table border="1">
@@ -146,13 +137,13 @@ function SellerOrdersDetails({ match: { params: { id } } }) {
             <tr key={ i + 1 }>
               <td
                 data-testid={
-                  `seller_order_details__element-order-table-item-number-${i}`
+                  `customer_order_details__element-order-table-item-number${i}`
                 }
               >
                 {i + 1}
               </td>
               <td
-                data-testid={ `seller_order_details__element-order-table-name-${i}` }
+                data-testid={ `customer_order_details__element-order-table-name-${i}` }
               >
                 {sale && (sale.products.filter((p) => {
                   const matchProduct = p.id === product.productId;
@@ -160,13 +151,13 @@ function SellerOrdersDetails({ match: { params: { id } } }) {
                 }))[0].name}
               </td>
               <td
-                data-testid={ `seller_order_details__element-order-table-quantity-${i}` }
+                data-testid={ `customer_order_details__element-order-table-quantity${i}` }
               >
                 { product.quantity }
               </td>
               <td
                 data-testid={
-                  `seller_order_details__element-order-table-unit-price-${i}`
+                  `customer_order_details__element-order-table-unit-price${i}`
                 }
               >
                 {(sale.products.filter((p) => {
@@ -175,7 +166,9 @@ function SellerOrdersDetails({ match: { params: { id } } }) {
                 }))[0].price.replace('.', ',')}
               </td>
               <td
-                data-testid={ `seller_order_details__element-order-table-sub-total-${i}` }
+                data-testid={
+                  `customer_order_details__element-order-table-sub-total-${i}`
+                }
               >
                 {
                   (product.quantity * (sale.products.filter((p) => {
@@ -189,7 +182,7 @@ function SellerOrdersDetails({ match: { params: { id } } }) {
         </tbody>
       </table>
       <div
-        data-testid="seller_order_details__element-order-total-price"
+        data-testid="customer_order_details__element-order-total-price"
       >
         {(sale && sale.sale && sale.sale.totalPrice
         && sale.sale.totalPrice) ? sale.sale.totalPrice.replace('.', ',') : ''}
@@ -198,7 +191,7 @@ function SellerOrdersDetails({ match: { params: { id } } }) {
     </>
   );
 }
-SellerOrdersDetails.propTypes = {
+OrdersDetails.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
       id: PropTypes.string,
@@ -206,4 +199,4 @@ SellerOrdersDetails.propTypes = {
   }).isRequired,
 };
 
-export default SellerOrdersDetails;
+export default OrdersDetails;

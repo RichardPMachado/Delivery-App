@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react';
 import { useHistory, Link } from 'react-router-dom';
 import { requestLogin } from '../services/request';
@@ -5,8 +6,10 @@ import { requestLogin } from '../services/request';
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [userRole, setUserRole] = useState('');
+  const [loged, setLoged] = useState(false);
   const [failedTryLogin, setFailedTryLogin] = useState(false);
+
+  const userLocalStorage = JSON.parse(localStorage.getItem('user'));
 
   const handleEmail = ({ target }) => {
     setEmail(target.value);
@@ -40,10 +43,10 @@ function Login() {
         'user',
         JSON.stringify(user),
       );
-      const { role } = JSON.parse(localStorage.getItem('user'));
-      setUserRole(role);
+      setLoged(true);
     } catch (error) {
       setFailedTryLogin(true);
+      console.log(error);
     }
   };
 
@@ -51,8 +54,17 @@ function Login() {
     setFailedTryLogin(false);
   }, [email, password]);
 
-  if (userRole === 'seller') redirect('seller/orders');
-  if (userRole === 'customer') redirect('customer/products');
+  useEffect(() => {
+    if (userLocalStorage) {
+      if (userLocalStorage.role === 'seller') redirect('seller/orders');
+      if (userLocalStorage.role === 'customer') redirect('customer/products');
+    }
+  }, []);
+  if (loged
+    && userLocalStorage && userLocalStorage.role === 'seller') redirect('seller/orders');
+  if (loged
+    && userLocalStorage
+    && userLocalStorage.role === 'customer') redirect('customer/products');
   return (
     <div>
       <h1> Login </h1>
