@@ -18,7 +18,6 @@ const getAllSales = async (_req, res) => {
 
 const getSaleById = async (req, res) => {
   const { id } = req.params;
-  console.log("AQUI", id)
   const { type, message } = await SaleService.getSaleById(id);
   if (type === null) return res.status(404).json({ message });
   return res.status(type).json(message);
@@ -26,7 +25,6 @@ const getSaleById = async (req, res) => {
 
 const createSale = async (req, res) => {
   const sale = req.body;
-  console.log(sale);
   const { type, message } = await SaleService.createSale(sale);
   if (type === null) return res.status(404).json({ message });
   return res.status(type).json(message);
@@ -35,7 +33,6 @@ const createSale = async (req, res) => {
 const attSale = async (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
-  console.log("TESTA", status);
   const newSale = await SaleService.attSale(id, status);
 
   return res.status(200).json(newSale);

@@ -18,7 +18,6 @@ const getSaleById = async (id) => {
  const seller = await User.findByPk(sale.sellerId);
  const salesProducts = await SalesProduct.findAll({where: { saleId: sale.id },})
  const products = await Promise.all(salesProducts.map( async (e) => ( await Product.findByPk(e.productId))))
- console.log(products);
  if (!sale) return { type: null, message: 'Sale not found' };
  return { type: 200, message: {
   sale,
@@ -28,10 +27,8 @@ const getSaleById = async (id) => {
 };
 
 const createSale = async (sale) => {
-    try {
   const verifyUserId = await User.findOne({where: { email: sale.email },});
   const verifySallerId = await User.findByPk(sale.sellerId);
-  console.log(verifyUserId)
 
   if (!verifyUserId || !verifySallerId) return { type: null, message: 'Not Found' };
 
@@ -45,19 +42,16 @@ const createSale = async (sale) => {
       status: 'Pendente',
     },
   );
-  const a = sale.teste.map( async (e) => { await SalesProduct.create(
+  const products = sale.products.map( async (e) => { await SalesProduct.create(
     {
       saleId: newSale.id,
       productId: e.productId,
       quantity: e.productQuantity,
     },
   );})
-  Promise.all(a); 
+  Promise.all(products); 
   if (!newSale) return { type: null, message: 'n' };
   return { type: 201, message: newSale };
-} catch(err) {
-    console.log(err)
-}
 };
 
 const attSale = async (id, status) => {
