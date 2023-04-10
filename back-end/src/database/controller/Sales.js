@@ -17,6 +17,13 @@ const getAllSalesByUser = async (req, res) => {
   return res.status(200).json(sales);
 };
 
+const getAllSalesBySeller = async (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+  const sales = await SaleService.getAllSalesBySeller(id);
+  return res.status(200).json(sales);
+};
+
 const getAllSales = async (_req, res) => {
   const sales = await SaleService.getAllSales();
   return res.status(200).json(sales);
@@ -50,4 +57,5 @@ module.exports = {
   createSale,
   attSale,
   getAllSales,
+  getAllSalesBySeller,
 };

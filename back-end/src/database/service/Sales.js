@@ -14,6 +14,12 @@ const getAllSalesByUser = async (id) => {
   return { sales };
 }; 
 
+const getAllSalesBySeller = async (id) => {
+  /* console.log(id); */
+  const sales = await Sale.findAll({ where: { sellerId: id } });
+  return { sales };
+}; 
+
 const getAllSales = async () => {
   const sales = await Sale.findAll();
   return { sales };
@@ -67,4 +73,5 @@ module.exports = {
   createSale,
   attSale,
   getAllSales,
+  getAllSalesBySeller,
 };

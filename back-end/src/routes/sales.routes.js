@@ -8,7 +8,9 @@ const router = Router();
 
 router.get('/sales', SalesController.getAllSales);
 
-router.get('/sales/:id', SalesController.getAllSalesByUser);
+router.get('/sales/seller/:id', SalesController.getAllSalesBySeller);
+
+router.get('/sales/user/:id', SalesController.getAllSalesByUser);
 
 router.get('/sale/:id', SalesController.getSaleById);
 

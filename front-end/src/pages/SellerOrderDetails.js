@@ -65,8 +65,13 @@ function SellerOrdersDetails({ match: { params: { id } } }) {
     }
   };
 
-  useEffect(() => {
+  useEffect(async () => {
     getSaleAndUser();
+    try {
+      await attSale(id, { status });
+    } catch (error) {
+      console.log(error);
+    }
   }, []);
 
   const redirect = (pathName) => {

@@ -33,7 +33,12 @@ export const requestUsers = async () => {
 };
 
 export const requestSalesByUser = async (id) => {
-  const { data } = await api.get(`/sales/${id}`);
+  const { data } = await api.get(`/sales/user/${id}`);
+  return data;
+};
+
+export const requestSalesBySeller = async (id) => {
+  const { data } = await api.get(`/sales/seller/${id}`);
   return data;
 };
 

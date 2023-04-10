@@ -34,15 +34,6 @@ function OrdersDetails({ match: { params: { id } } }) {
     setSale(requestedSaleById);
   };
 
-  useEffect(() => {
-    getSaleAndUser();
-  }, []);
-
-  const logout = () => {
-    localStorage.removeItem('user');
-    history.push('/login');
-  };
-
   const attSaleDelivered = async (event) => {
     event.preventDefault();
 
@@ -51,6 +42,19 @@ function OrdersDetails({ match: { params: { id } } }) {
     } catch (error) {
       console.log(error);
     }
+  };
+  useEffect(async () => {
+    getSaleAndUser();
+    try {
+      await attSale(id, { status });
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  const logout = () => {
+    localStorage.removeItem('user');
+    history.push('/login');
   };
 
   const redirect = (pathName) => {
