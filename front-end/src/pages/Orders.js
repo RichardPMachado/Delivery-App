@@ -2,21 +2,22 @@
 import { useEffect, useState, useContext } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { format } from 'date-fns';
-import { requestSales } from '../services/request';
+import { requestSalesByUser } from '../services/request';
 import SaleContext from '../context/sale.context';
 
 function SellerOrders() {
   const { setSaleId } = useContext(SaleContext);
+  const userLocalStorage = JSON.parse(localStorage.getItem('user'));
+  const { id } = userLocalStorage;
   const [sales, setSales] = useState({ sales: [] });
   const getSales = async () => {
-    const requestedSales = await requestSales();
+    const requestedSales = await requestSalesByUser(id);
     setSales(requestedSales);
   };
+  console.log(sales);
   useEffect(() => {
     getSales();
   }, []);
-  const userLocalStorage = JSON.parse(localStorage.getItem('user'));
-  console.log(userLocalStorage);
   const history = useHistory();
 
   const redirect = (pathName) => {

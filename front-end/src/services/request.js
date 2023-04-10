@@ -32,6 +32,11 @@ export const requestUsers = async () => {
   return data;
 };
 
+export const requestSalesByUser = async (id) => {
+  const { data } = await api.get(`/sales/${id}`);
+  return data;
+};
+
 export const requestSales = async () => {
   const { data } = await api.get('/sales');
   return data;

@@ -8,6 +8,8 @@ const router = Router();
 
 router.get('/sales', SalesController.getAllSales);
 
+router.get('/sales/:id', SalesController.getAllSalesByUser);
+
 router.get('/sale/:id', SalesController.getSaleById);
 
 router.post('/customer/checkout', jwtValidation, SalesController.createSale);

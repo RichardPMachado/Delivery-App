@@ -10,6 +10,13 @@ const { SaleService } = require('../service');
   return res.status(type).json({ message });
 }; */
 
+const getAllSalesByUser = async (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+  const sales = await SaleService.getAllSalesByUser(id);
+  return res.status(200).json(sales);
+};
+
 const getAllSales = async (_req, res) => {
   const sales = await SaleService.getAllSales();
   return res.status(200).json(sales);
@@ -38,8 +45,9 @@ const attSale = async (req, res) => {
 };
 
 module.exports = {
-  getAllSales,
+  getAllSalesByUser,
   getSaleById,
   createSale,
   attSale,
+  getAllSales,
 };

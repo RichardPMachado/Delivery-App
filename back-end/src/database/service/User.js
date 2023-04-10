@@ -20,6 +20,7 @@ const loginUser = async (email, password) => {
   const token = await GenerateToken(user.name, email, user.role);
   return { message: { 
     name: user.name, 
+    id: user.id,
     email, 
     role: user.role,
     token } };
@@ -39,6 +40,7 @@ const registerUser = async (name, email, password) => {
   });
   return { message: {
     name,
+    id: user.id,
     role: user.role,
     email,
     token },
