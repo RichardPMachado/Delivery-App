@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import { useHistory, Link } from 'react-router-dom';
 
@@ -16,6 +17,8 @@ function Products() {
     localStorage.removeItem('user');
     history.push('/login');
   };
+
+  const userLocalStorage = JSON.parse(localStorage.getItem('user'));
 
   const handleClick = () => {
     localStorage.setItem('cart', JSON.stringify(cart));
@@ -63,12 +66,24 @@ function Products() {
     setCartValue(newCartValue);
   }, [cart]);
 
+  const redirect = (pathName) => {
+    history.push(`/${pathName}`);
+  };
+
+  useEffect(() => {
+    if (userLocalStorage) {
+      if (userLocalStorage.role === 'seller') redirect('seller/orders');
+      if (userLocalStorage.role === 'customer') redirect('customer/products');
+    }
+    if (userLocalStorage === null) {
+      redirect('login');
+    }
+  }, []);
+
   const ROUTE = 'customer_products';
   const ELEMENT = 'element-navbar';
   const BUTTON = 'button';
   const CHECKOUT_BOTTOM = 'checkout-bottom';
-
-  const { name } = JSON.parse(localStorage.getItem('user')) || { name: 'Usuário' };
 
   return (
     <>
@@ -87,7 +102,7 @@ function Products() {
           Meus Pedidos
         </Link>
         <span data-testid={ `${ROUTE}__${ELEMENT}-user-full-name` }>
-          { name }
+          { userLocalStorage && userLocalStorage.name }
         </span>
         <Link
           to="/login"

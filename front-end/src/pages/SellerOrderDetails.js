@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { requestSaleById, attSale } from '../services/request';
 
 function SellerOrdersDetails({ match: { params: { id } } }) {
-  const { name } = JSON.parse(localStorage.getItem('user'));
+  const userLocalStorage = JSON.parse(localStorage.getItem('user'));
   const history = useHistory();
   /* const path = window.location.pathname.split('/'); */
   const [sale, setSale] = useState();
@@ -69,14 +69,31 @@ function SellerOrdersDetails({ match: { params: { id } } }) {
     getSaleAndUser();
   }, []);
 
+  const redirect = (pathName) => {
+    history.push(`/${pathName}`);
+  };
+
+  useEffect(() => {
+    if (userLocalStorage) {
+      if (userLocalStorage.role === 'seller') redirect(`seller/orders/${id}`);
+      if (userLocalStorage.role === 'customer') redirect(`customer/orders/${id}`);
+    }
+    if (userLocalStorage === null) {
+      redirect('login');
+    }
+  }, []);
+
   return (
     <>
       <nav>
-        <span data-testid={ `${ROUTE}__${ELEMENT}-link-orders` }>
+        <Link
+          to="/seller/orders"
+          data-testid={ `${ROUTE}__${ELEMENT}-link-orders` }
+        >
           Pedidos
-        </span>
+        </Link>
         <span data-testid={ `${ROUTE}__${ELEMENT}-user-full-name` }>
-          { name }
+          { userLocalStorage && userLocalStorage.name }
         </span>
         <Link
           to="/login"

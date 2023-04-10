@@ -63,6 +63,7 @@ function Register() {
 
   if (userRole === 'customer') redirect('customer/products');
   if (userRole === 'seller') redirect('seller/orders');
+  if (userRole === 'administrator') redirect('admin/manage');
   return (
     <div>
       <h2>Register</h2>

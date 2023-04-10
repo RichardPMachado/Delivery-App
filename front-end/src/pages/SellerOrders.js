@@ -1,5 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState, useContext } from 'react';
 import { Link, useHistory } from 'react-router-dom';
+import { format } from 'date-fns';
 import { requestSales } from '../services/request';
 import SaleContext from '../context/sale.context';
 
@@ -13,7 +15,8 @@ function SellerOrders() {
   useEffect(() => {
     getSales();
   }, []);
-  const { name } = JSON.parse(localStorage.getItem('user'));
+  const userLocalStorage = JSON.parse(localStorage.getItem('user'));
+  console.log(userLocalStorage);
   const history = useHistory();
 
   const logout = () => {
@@ -22,16 +25,33 @@ function SellerOrders() {
   };
   const ROUTE = 'customer_products';
   const ELEMENT = 'element-navbar';
-  console.log(sales);
+  const formatDate = (date) => format((new Date(date)), 'dd/MM/yyy');
+
+  const redirect = (pathName) => {
+    history.push(`/${pathName}`);
+  };
+
+  useEffect(() => {
+    if (userLocalStorage) {
+      if (userLocalStorage.role === 'seller') redirect('seller/orders');
+      if (userLocalStorage.role === 'customer') redirect('customer/orders');
+    }
+    if (userLocalStorage === null) {
+      redirect('login');
+    }
+  }, []);
   return (
     <>
 
       <nav>
-        <span data-testid="customer_products__element-navbar-link-orders">
+        <Link
+          to="/seller/orders"
+          data-testid="customer_products__element-navbar-link-orders"
+        >
           Pedidos
-        </span>
+        </Link>
         <span data-testid="customer_products__element-navbar-user-full-name">
-          { name }
+          { userLocalStorage && userLocalStorage.name }
         </span>
         <Link
           to="/login"
@@ -59,11 +79,15 @@ function SellerOrders() {
             {sale.status}
           </h2>
           <span data-testid={ `seller_orders__element-order-date${sale.id}` }>
-            {Date.parse(sale.saleDate)}
+            {formatDate(sale.saleDate)}
           </span>
+          <br />
+          <br />
           <span data-testid={ `seller_orders__element-card-price${sale.id}` }>
             {sale.totalPrice}
           </span>
+          <br />
+          <br />
           <span data-testid={ `seller_orders__element-card-address${sale.id}` }>
             {sale.deliveryAddress}
           </span>

@@ -16,18 +16,20 @@ const getAllSales = async () => {
 const getSaleById = async (id) => {
  const sale = await Sale.findByPk(id);
  const seller = await User.findByPk(sale.sellerId);
- const salesProducts = await SalesProduct.findAll({where: { saleId: sale.id },})
- const products = await Promise.all(salesProducts.map( async (e) => ( await Product.findByPk(e.productId))))
+ const salesProducts = await SalesProduct.findAll({ where: { saleId: sale.id } });
+ const products = await Promise.all(salesProducts
+  .map(async (e) => (Product.findByPk(e.productId))));
  if (!sale) return { type: null, message: 'Sale not found' };
- return { type: 200, message: {
+ return { type: 200, 
+  message: {
   sale,
   seller,
   salesProducts,
-  products }, };
+  products } };
 };
 
 const createSale = async (sale) => {
-  const verifyUserId = await User.findOne({where: { email: sale.email },});
+  const verifyUserId = await User.findOne({ where: { email: sale.email } });
   const verifySallerId = await User.findByPk(sale.sellerId);
 
   if (!verifyUserId || !verifySallerId) return { type: null, message: 'Not Found' };
@@ -42,13 +44,15 @@ const createSale = async (sale) => {
       status: 'Pendente',
     },
   );
-  const products = sale.products.map( async (e) => { await SalesProduct.create(
-    {
+  const products = sale.products.map(async (e) => {
+ await SalesProduct.create(
+{
       saleId: newSale.id,
       productId: e.productId,
       quantity: e.productQuantity,
     },
-  );})
+  ); 
+});
   Promise.all(products); 
   if (!newSale) return { type: null, message: 'n' };
   return { type: 201, message: newSale };

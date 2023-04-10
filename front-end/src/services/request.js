@@ -10,6 +10,12 @@ export const requestRegister = async ({ name, email, password }) => {
   return data;
 };
 
+export const requestAdmRegister = async ({ name, email, password, role }) => {
+  const { data } = await api.post('/adm/register', { name, email, password, role });
+
+  return data;
+};
+
 export const requestLogin = async ({ email, password }) => {
   const { data } = await api.post('/login', { email, password });
 

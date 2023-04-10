@@ -6,13 +6,12 @@ import PropTypes from 'prop-types';
 import { requestSaleById, attSale } from '../services/request';
 
 function OrdersDetails({ match: { params: { id } } }) {
-  const { name } = JSON.parse(localStorage.getItem('user'));
+  const userLocalStorage = JSON.parse(localStorage.getItem('user'));
   const history = useHistory();
   /* const path = window.location.pathname.split('/'); */
   const [sale, setSale] = useState();
 
   const status = sale && sale.sale && sale.sale.status;
-  console.log(sale);
 
   const date = (sale && sale.sale && sale.sale.saleDate)
     ? format(new Date(sale.sale.saleDate), 'dd/MM/yyy') : null;
@@ -23,6 +22,7 @@ function OrdersDetails({ match: { params: { id } } }) {
 
   const ROUTE = 'customer_products';
   const ELEMENT = 'element-navbar';
+  const data = 'customer_order_details__element-order-details-label-delivery-status';
 
   const buttonDeliveredValidate = (() => {
     if (status === delivered
@@ -33,6 +33,10 @@ function OrdersDetails({ match: { params: { id } } }) {
     const requestedSaleById = await requestSaleById(id);
     setSale(requestedSaleById);
   };
+
+  useEffect(() => {
+    getSaleAndUser();
+  }, []);
 
   const logout = () => {
     localStorage.removeItem('user');
@@ -49,8 +53,18 @@ function OrdersDetails({ match: { params: { id } } }) {
     }
   };
 
+  const redirect = (pathName) => {
+    history.push(`/${pathName}`);
+  };
+
   useEffect(() => {
-    getSaleAndUser();
+    if (userLocalStorage) {
+      if (userLocalStorage.role === 'seller') redirect(`seller/orders/${id}`);
+      if (userLocalStorage.role === 'customer') redirect(`customer/orders/${id}`);
+    }
+    if (userLocalStorage === null) {
+      redirect('login');
+    }
   }, []);
 
   return (
@@ -69,7 +83,7 @@ function OrdersDetails({ match: { params: { id } } }) {
           Meus Pedidos
         </Link>
         <span data-testid={ `${ROUTE}__${ELEMENT}-user-full-name` }>
-          { name }
+          { userLocalStorage && userLocalStorage.name }
         </span>
         <Link
           to="/login"
@@ -94,7 +108,7 @@ function OrdersDetails({ match: { params: { id } } }) {
           <span
             data-testid="customer_order_details__element-order-details-label-seller-name"
           >
-            {sale && sale.seller && sale.seller.name}
+            {sale && sale.seller.name}
           </span>
           <br />
           <br />
@@ -106,8 +120,7 @@ function OrdersDetails({ match: { params: { id } } }) {
           <br />
           <br />
           <span
-            data-testid={ 'customer_order_details__element-order-details-'
-            + 'label-delivery-status<index>' }
+            data-testid={ data }
           >
             {status}
           </span>

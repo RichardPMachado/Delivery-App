@@ -58,6 +58,7 @@ function Login() {
     if (userLocalStorage) {
       if (userLocalStorage.role === 'seller') redirect('seller/orders');
       if (userLocalStorage.role === 'customer') redirect('customer/products');
+      if (userLocalStorage.role === 'administrator') redirect('admin/manage');
     }
   }, []);
   if (loged
@@ -65,6 +66,9 @@ function Login() {
   if (loged
     && userLocalStorage
     && userLocalStorage.role === 'customer') redirect('customer/products');
+  if (loged
+      && userLocalStorage
+      && userLocalStorage.role === 'administrator') redirect('admin/manage');
   return (
     <div>
       <h1> Login </h1>
