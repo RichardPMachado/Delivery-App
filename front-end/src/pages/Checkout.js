@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { requestUsers, requestNewSale, setToken } from '../services/request';
@@ -7,7 +8,8 @@ import { requestUsers, requestNewSale, setToken } from '../services/request';
 function Checkout() {
   const [cart, setCart] = useState(JSON.parse(localStorage.getItem('cart')));
   const cartValue = localStorage.getItem('cartValue');
-  const { name, email, token } = JSON.parse(localStorage.getItem('user'));
+  const { email, token } = JSON.parse(localStorage.getItem('user'));
+  const userLocalStorage = JSON.parse(localStorage.getItem('user'));
   const ROUTE = 'customer_products';
   const ELEMENT = 'element-navbar';
 
@@ -45,6 +47,7 @@ function Checkout() {
     try {
       setToken(token);
       const products = cart.map((p) => {
+        console.log(p);
         const productId = p.id;
         const productQuantity = p.quantity;
         return { productId, productQuantity };
@@ -64,6 +67,19 @@ function Checkout() {
       console.log(error);
     }
   };
+  const redirect = (pathName) => {
+    history.push(`/${pathName}`);
+  };
+
+  useEffect(() => {
+    if (userLocalStorage) {
+      if (userLocalStorage.role === 'seller') redirect('seller/orders');
+      if (userLocalStorage.role === 'customer') redirect('customer/checkout');
+    }
+    if (userLocalStorage === null) {
+      redirect('/login');
+    }
+  }, []);
   return (
     <>
       <nav>
@@ -80,7 +96,7 @@ function Checkout() {
           Meus Pedidos
         </Link>
         <span data-testid={ `${ROUTE}__${ELEMENT}-user-full-name` }>
-          { name }
+          { userLocalStorage && userLocalStorage.name }
         </span>
         <Link
           to="/login"

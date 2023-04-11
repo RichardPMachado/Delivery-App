@@ -10,6 +10,12 @@ export const requestRegister = async ({ name, email, password }) => {
   return data;
 };
 
+export const requestAdmRegister = async ({ name, email, password, role }) => {
+  const { data } = await api.post('/adm/register', { name, email, password, role });
+
+  return data;
+};
+
 export const requestLogin = async ({ email, password }) => {
   const { data } = await api.post('/login', { email, password });
 
@@ -23,6 +29,16 @@ export const requestProducts = async () => {
 
 export const requestUsers = async () => {
   const { data } = await api.get('/users');
+  return data;
+};
+
+export const requestSalesByUser = async (id) => {
+  const { data } = await api.get(`/sales/user/${id}`);
+  return data;
+};
+
+export const requestSalesBySeller = async (id) => {
+  const { data } = await api.get(`/sales/seller/${id}`);
   return data;
 };
 

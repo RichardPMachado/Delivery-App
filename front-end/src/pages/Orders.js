@@ -1,22 +1,28 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState, useContext } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { format } from 'date-fns';
-import { requestSales } from '../services/request';
+import { requestSalesByUser } from '../services/request';
 import SaleContext from '../context/sale.context';
 
 function SellerOrders() {
   const { setSaleId } = useContext(SaleContext);
+  const userLocalStorage = JSON.parse(localStorage.getItem('user'));
+  const { id } = userLocalStorage;
   const [sales, setSales] = useState({ sales: [] });
   const getSales = async () => {
-    const requestedSales = await requestSales();
+    const requestedSales = await requestSalesByUser(id);
     setSales(requestedSales);
   };
+  console.log(sales);
   useEffect(() => {
     getSales();
   }, []);
-  const { name } = JSON.parse(localStorage.getItem('user'));
   const history = useHistory();
 
+  const redirect = (pathName) => {
+    history.push(`/${pathName}`);
+  };
   const logout = () => {
     localStorage.removeItem('user');
     history.push('/login');
@@ -24,7 +30,15 @@ function SellerOrders() {
   const formatDate = (date) => format((new Date(date)), 'dd/MM/yyy');
   const ROUTE = 'customer_products';
   const ELEMENT = 'element-navbar';
-  console.log(sales);
+  useEffect(() => {
+    if (userLocalStorage) {
+      if (userLocalStorage.role === 'seller') redirect('seller/orders');
+      if (userLocalStorage.role === 'customer') redirect('customer/orders');
+    }
+    if (userLocalStorage === null) {
+      redirect('/login');
+    }
+  }, []);
   return (
     <>
       <nav>
@@ -41,7 +55,7 @@ function SellerOrders() {
           Meus Pedidos
         </Link>
         <span data-testid={ `${ROUTE}__${ELEMENT}-user-full-name` }>
-          { name }
+          { userLocalStorage && userLocalStorage.name }
         </span>
         <Link
           to="/login"
