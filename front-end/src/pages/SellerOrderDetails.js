@@ -11,6 +11,8 @@ function SellerOrdersDetails({ match: { params: { id } } }) {
   /* const path = window.location.pathname.split('/'); */
   const [sale, setSale] = useState();
 
+  const timeOut = 500;
+
   const status = sale && sale.sale && sale.sale.status;
   console.log(sale);
 
@@ -67,11 +69,14 @@ function SellerOrdersDetails({ match: { params: { id } } }) {
 
   useEffect(async () => {
     getSaleAndUser();
-    try {
-      await attSale(id, { status });
-    } catch (error) {
-      console.log(error);
-    }
+  }, [/* sale */]);
+
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      getSaleAndUser();
+    }, timeOut);
+
+    return () => clearInterval(interval);
   }, []);
 
   const redirect = (pathName) => {

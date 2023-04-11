@@ -13,6 +13,8 @@ function OrdersDetails({ match: { params: { id } } }) {
 
   const status = sale && sale.sale && sale.sale.status;
 
+  const timeOut = 500;
+
   const date = (sale && sale.sale && sale.sale.saleDate)
     ? format(new Date(sale.sale.saleDate), 'dd/MM/yyy') : null;
 
@@ -45,11 +47,14 @@ function OrdersDetails({ match: { params: { id } } }) {
   };
   useEffect(async () => {
     getSaleAndUser();
-    try {
-      await attSale(id, { status });
-    } catch (error) {
-      console.log(error);
-    }
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      getSaleAndUser();
+    }, timeOut);
+
+    return () => clearInterval(interval);
   }, []);
 
   const logout = () => {
