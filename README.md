@@ -49,9 +49,9 @@ A aplicação foi desenvolvida com:
 - Express;
 - MySql;
 
-/* **Diagrama de ER conforme imagem:**
+<!-- **Diagrama de ER conforme imagem:**
 
-![Diagrama de ER](link_para_imagem) */
+![Diagrama de ER](link_para_imagem) -->
 
 ### Como rodar o projeto
 
