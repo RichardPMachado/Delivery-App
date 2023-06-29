@@ -1,0 +1,74 @@
+.login-page-container {
+  align-items: center;
+  display: flex;
+  gap: 120px;
+  justify-content: end;
+  position: relative;
+}
+
+.login-content {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  width: 488px;
+}
+
+.login-line-background {
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 300px;
+}
+
+.login-content img {
+  width: 280px;
+}
+
+.title-and-description-login {
+  display: flex;
+  flex-direction: column;
+}
+
+.title-login {
+  color: var(--global-gray-color-300);
+}
+
+.login-page-container p {
+  color: var(--global-gray-color-500);
+}
+
+.inputs-container-login {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.forget-password {
+  align-self: flex-end;
+  color: var(--global-primary-color-dark);
+}
+
+.login-button {
+  font-size: 1.5rem;
+}
+
+.login-create-account-content {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.dont-have-account {
+  color: var(--global-gray-color-400);
+}
+
+.create-account-link {
+  background-color: transparent;
+  border: none;
+  color: var(--global-primary-color-medium);
+  font-size: 1rem;
+}
+
+.login-background-image {
+  height: 100vh;
+}

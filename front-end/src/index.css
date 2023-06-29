@@ -1,13 +1,36 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+:root {
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  --global-primary-color-light: rgba(255, 221, 122, 1);
+
+  --global-primary-color-medium: rgba(205, 161, 0, 1);
+
+  --global-primary-color-dark: rgba(163, 122, 3, 1);
+
+
+  --global-feedback-color-success: rgba(29, 138, 17, 1);
+
+  --global-feedback-color-alert: rgba(248, 192, 30, 1);
+
+  --global-feedback-color-dangerous: rgba(196, 24, 24, 1);
+
+
+  --global-gray-color-50: rgba(250, 250, 250, 1);
+
+  --global-gray-color-100: rgba(242, 242, 242, 1);
+
+  --global-gray-color-200: rgba(230, 230, 230, 1);
+
+  --global-gray-color-300: rgba(204, 204, 204, 1);
+
+  --global-gray-color-400: rgba(179, 179, 179, 1);
+
+  --global-gray-color-500: grey;
+
+  --global-gray-color-600: rgba(77, 77, 77, 1);
+
+  --global-gray-color-700: rgba(51, 51, 51, 1);
+
+  --global-gray-color-800: rgba(26, 26, 26, 1);
+
+  --global-gradient-bg: linear-gradient(180deg, rgba(26, 26, 26, 0.1) 0%, #212121 100%);
 }

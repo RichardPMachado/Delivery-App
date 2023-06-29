@@ -1,17 +1,23 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import { requestUsers, requestNewSale, setToken } from '../services/request';
+import { useHistory } from 'react-router-dom';
 
-/* const jwt = require('jsonwebtoken'); */
+import { requestUsers, requestNewSale, setToken } from '../services/request';
+import Header from '../components/Header';
+import ProductTable from '../components/CheckoutTable';
+
+import lineBackground3 from '../images/lineBackground3.svg';
+import lineBackground4 from '../images/lineBackground4.svg';
+import lineBackground5 from '../images/lineBackground5.svg';
+
+import '../styles/pages/Checkout.css';
+import Footer from '../components/Footer';
 
 function Checkout() {
   const [cart, setCart] = useState(JSON.parse(localStorage.getItem('cart')));
   const cartValue = localStorage.getItem('cartValue');
   const { email, token } = JSON.parse(localStorage.getItem('user'));
   const userLocalStorage = JSON.parse(localStorage.getItem('user'));
-  const ROUTE = 'customer_products';
-  const ELEMENT = 'element-navbar';
 
   const [users, setUsers] = useState({ users: [] });
   const [deliveryAddress, setdeliveryAddress] = useState('');
@@ -19,11 +25,6 @@ function Checkout() {
   const [selectValue, setSelectValue] = useState(1);
 
   const history = useHistory();
-
-  const logout = () => {
-    localStorage.removeItem('user');
-    history.push('/login');
-  };
 
   useEffect(() => {
     const getUsers = async () => {
@@ -80,146 +81,128 @@ function Checkout() {
       redirect('/login');
     }
   }, []);
-  return (
-    <>
-      <nav>
-        <Link
-          data-testid={ `${ROUTE}__${ELEMENT}-link-products` }
-          to="/customer/products"
-        >
-          Produtos
-        </Link>
-        <Link
-          data-testid={ `${ROUTE}__${ELEMENT}-link-orders` }
-          to="/customer/orders"
-        >
-          Meus Pedidos
-        </Link>
-        <span data-testid={ `${ROUTE}__${ELEMENT}-user-full-name` }>
-          { userLocalStorage && userLocalStorage.name }
-        </span>
-        <Link
-          to="/login"
-          data-testid={ `${ROUTE}__${ELEMENT}-link-logout` }
-          onClick={ logout }
-        >
-          Sair
-        </Link>
-      </nav>
-      <table border="1">
-        <thead>
-          <tr>
-            <th>Item</th>
-            <th>Descrição</th>
-            <th>Quantidade</th>
-            <th>Valor Unitario</th>
-            <th>Sub-Total</th>
-            <th>Remover Item</th>
-          </tr>
-        </thead>
-        <tbody>
-          {cart.map((product, i) => (
-            <tr key={ product.id }>
-              <td
-                id={ product.id }
-                data-testid={
-                  `customer_checkout__element-order-table-item-number-${i}`
-                }
-              >
-                {i + 1}
-              </td>
-              <td
-                id={ product.id }
-                data-testid={ `customer_checkout__element-order-table-name-${i}` }
-              >
-                {product.name}
-              </td>
-              <td
-                id={ product.id }
-                data-testid={ `customer_checkout__element-order-table-quantity-${i}` }
-              >
-                { product.quantity }
-              </td>
-              <td
-                id={ product.id }
-                data-testid={ `customer_checkout__element-order-table-unit-price-${i}` }
-              >
-                {product.price.toString().replace('.', ',')}
-              </td>
-              <td
-                id={ product.id }
-                data-testid={ `customer_checkout__element-order-table-sub-total-${i}` }
-              >
-                {
-                  (product.quantity * product.price)
-                    .toFixed(2).toString().replace('.', ',')
-                }
-              </td>
-              <td>
-                <button
-                  type="button"
-                  id={ product.id }
-                  data-testid={ `customer_checkout__element-order-table-remove-${i}` }
-                  onClick={ (e) => {
-                    let newCartValue = parseFloat(cartValue);
-                    const newCart = cart.filter((p) => {
-                      const status = p.id !== Number(e.target.id);
-                      if (!status) newCartValue -= p.quantity * p.price;
-                      return status;
-                    });
-                    localStorage.setItem(
-                      'cartValue',
-                      newCartValue.toFixed(2),
-                    );
-                    console.log(newCart);
-                    localStorage.setItem(
-                      'cart',
-                      JSON.stringify(newCart),
-                    );
-                    setCart(newCart);
-                  } }
-                >
-                  Remover
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <div data-testid="customer_checkout__element-order-total-price">
-        {
-          parseFloat(cartValue).toFixed(2).toString().replace('.', ',')
-        }
 
-      </div>
-      <button
-        type="button"
-        data-testid="customer_checkout__button-submit-order"
-        onClick={ (event) => newSale(event) }
+  const renderAddressLabel = () => (
+    <label
+      className="address-label-container"
+      htmlFor="address"
+    >
+      <span
+        className="label-input-address"
       >
-        Finalizar Pedido
-      </button>
+        Endereço
+      </span>
       <input
+        className="input"
+        id="address"
         type="text"
         data-testid="customer_checkout__input-address"
         value={ deliveryAddress }
+        placeholder="Insira o seu endereço"
         onChange={ handledeliveryAddress }
       />
+    </label>
+  );
+
+  const renderAddressNumberLabel = () => (
+    <label
+      className="address-number-label-container"
+      htmlFor="address-number"
+    >
+      <span
+        className="label-input-address-number"
+      >
+        Número
+      </span>
       <input
+        id="address-number"
+        className="input"
         type="text"
         data-testid="customer_checkout__input-address-number"
         value={ deliveryNumber }
+        placeholder="Insira o número do seu endereço"
         onChange={ handledeliveryNumber }
       />
-      <select
-        type="input"
-        data-testid="customer_checkout__select-seller"
-        value={ selectValue }
-        onChange={ (e) => setSelectValue(e.target.value) }
-      >
-        {users.users.map((user, i) => (
-          <option key={ i } value={ user.id }>{user.name}</option>))}
-      </select>
+    </label>
+  );
+
+  return (
+    <>
+      <Header />
+
+      <main className="main-checkout">
+        <img
+          className="product-line-background-3"
+          alt="Detalhes amarelos do fundo da tela"
+          src={ lineBackground3 }
+        />
+
+        <img
+          className="product-line-background-4"
+          alt="Detalhes amarelos do fundo da tela"
+          src={ lineBackground4 }
+        />
+
+        <img
+          className="product-line-background-5"
+          alt="Detalhes amarelos do fundo da tela"
+          src={ lineBackground5 }
+        />
+        <h2 className="page-yellow-title">Carrinho</h2>
+        <ProductTable
+          cart={ cart }
+          onRemoveProduct={ setCart }
+        />
+
+        <h2 className="page-yellow-title">Detalhes sobre a entrega</h2>
+
+        <div className="delivery-details-container">
+
+          <label
+            className="responsible-seller-container"
+            htmlFor="responsible-seller"
+          >
+            <span
+              className="label-input-responsible-seller"
+            >
+              Vendedor responsável
+            </span>
+            <select
+              className="input select-responsible-seller"
+              id="responsible-seller"
+              type="input"
+              data-testid="customer_checkout__select-seller"
+              value={ selectValue }
+              onChange={ (e) => setSelectValue(e.target.value) }
+            >
+              {
+                users.users.map((user, i) => (
+                  <option
+                    key={ i }
+                    value={ user.id }
+                  >
+                    {user.name}
+                  </option>
+                ))
+              }
+            </select>
+          </label>
+          <div className="address-content">
+            { renderAddressLabel() }
+            { renderAddressNumberLabel() }
+          </div>
+          <button
+            className="primary-button finalize-order-button"
+            type="button"
+            data-testid="customer_checkout__button-submit-order"
+            onClick={ (event) => newSale(event) }
+          >
+            Finalizar Pedido
+          </button>
+        </div>
+      </main>
+
+      <Footer />
     </>
   );
 }

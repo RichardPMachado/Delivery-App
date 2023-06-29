@@ -1,10 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import Header from '../components/Header';
 
 import ProductCard from '../components/ProductCard';
 import { requestProducts } from '../services/request';
 import replaceDotToComma from '../utils/replaceDotToComma';
+
+import lineBackground3 from '../images/lineBackground3.svg';
+import lineBackground4 from '../images/lineBackground4.svg';
+import lineBackground5 from '../images/lineBackground5.svg';
+
+import '../styles/pages/Products.css';
+import Footer from '../components/Footer';
 
 function Products() {
   const history = useHistory();
@@ -13,12 +21,8 @@ function Products() {
   const [cart, setCart] = useState([]);
   const [cartValue, setCartValue] = useState(0);
 
-  const logout = () => {
-    localStorage.removeItem('user');
-    history.push('/login');
-  };
-
-  const userLocalStorage = JSON.parse(localStorage.getItem('user'));
+  const userLocalStorage = JSON
+    .parse(localStorage.getItem('user')) || { name: 'Usuário' };
 
   const handleClick = () => {
     localStorage.setItem('cart', JSON.stringify(cart));
@@ -81,61 +85,66 @@ function Products() {
   }, []);
 
   const ROUTE = 'customer_products';
-  const ELEMENT = 'element-navbar';
   const BUTTON = 'button';
   const CHECKOUT_BOTTOM = 'checkout-bottom';
 
   return (
     <>
-      <nav>
-        <Link
-          data-testid={ `${ROUTE}__${ELEMENT}-link-products` }
-          to="/customer/products"
-        >
-          Produtos
+      <Header
+        cartQuantity={ cart.length }
+        isProductPage
+        goToCheckoutPage={ handleClick }
+      />
 
-        </Link>
-        <Link
-          data-testid={ `${ROUTE}__${ELEMENT}-link-orders` }
-          to="/customer/orders"
-        >
-          Meus Pedidos
-        </Link>
-        <span data-testid={ `${ROUTE}__${ELEMENT}-user-full-name` }>
-          { userLocalStorage && userLocalStorage.name }
-        </span>
-        <Link
-          to="/login"
-          data-testid={ `${ROUTE}__${ELEMENT}-link-logout` }
-          onClick={ logout }
-        >
-          Sair
-        </Link>
-      </nav>
-      <main>
-        {
-          products.map((product) => (
-            <ProductCard
-              key={ product.id }
-              updateCart={ updateCart }
-              product={ product }
-            />
-          ))
-        }
+      <main className="main-product">
+        <img
+          className="product-line-background-3"
+          alt="Detalhes amarelos do fundo da tela"
+          src={ lineBackground3 }
+        />
+
+        <img
+          className="product-line-background-4"
+          alt="Detalhes amarelos do fundo da tela"
+          src={ lineBackground4 }
+        />
+
+        <img
+          className="product-line-background-5"
+          alt="Detalhes amarelos do fundo da tela"
+          src={ lineBackground5 }
+        />
+        <h2 className="page-product-title">
+          Encontre cervejas de todos os estilos, sabores e aromas
+        </h2>
+        <div className="products-cards-container">
+          {
+            products.map((product) => (
+              <ProductCard
+                key={ product.id }
+                updateCart={ updateCart }
+                product={ product }
+              />
+            ))
+          }
+        </div>
         <button
+          className="secundary-button cart-button"
           type="button"
           data-testid={ `${ROUTE}__${BUTTON}-cart` }
           onClick={ handleClick }
           disabled={ cart.length === 0 }
         >
-          <span>Ver Carrinho</span>
+          <span>Carrinho: </span>
           <span
             data-testid={ `${ROUTE}__${CHECKOUT_BOTTOM}-value` }
           >
-            { replaceDotToComma(cartValue.toFixed(2)) }
+            { `R$${replaceDotToComma(cartValue.toFixed(2))}` }
           </span>
         </button>
       </main>
+
+      <Footer />
     </>
   );
 }

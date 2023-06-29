@@ -1,0 +1,47 @@
+.delivery-details-container {
+  backdrop-filter: blur(3px);
+  background: var(--global-gradient-bg);
+  border: solid 1px var(--global-gray-color-700);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px;
+}
+
+.responsible-seller-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label-input-responsible-seller, .label-input-address, .label-input-address-number {
+  color: var(--global-gray-color-200);
+}
+
+.select-responsible-seller {
+  color: var(--global-gray-color-300);
+}
+
+.address-content {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.address-label-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.address-number-label-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.finalize-order-button {
+  align-self: flex-end;
+  width: 488px;
+}

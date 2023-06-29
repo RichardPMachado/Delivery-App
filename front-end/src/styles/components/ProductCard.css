@@ -1,0 +1,73 @@
+.product-card-container {
+  align-items: center;
+  backdrop-filter: blur(3px);
+  background: var(--global-gradient-bg);
+  border: solid 2px var(--global-gray-color-700);
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 24px;
+}
+
+.product-card-image {
+  width: 200px;
+}
+
+.product-card-price-tag-container {
+  display: flex;
+  justify-content: start;
+  width: 100%;
+}
+
+.product-card-price-tag {
+  background-color: var(--global-gray-color-700);
+  border: solid 2px var(--global-gray-color-600);
+  border-radius: 8px;
+  color: var(--global-primary-color-light);
+  display: flex;
+  font-size: 1rem;
+  justify-content: center;
+  width: 80px;
+}
+
+.product-card-container p {
+  color: var(--global-gray-color-50);
+}
+
+.quantity-div-content {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  width: 100%;
+}
+
+.quantity-button {
+  background-color: transparent;
+  border-color: transparent;
+  border-style: solid;
+  color: var(--global-primary-color-medium);
+  cursor: pointer;
+  width: 32px;
+}
+
+.quantity-icon {
+  height: 32px;
+  width: 32px;
+}
+
+.quantity-input {
+  background-color: transparent;
+  border-color: transparent;
+  border-style: solid;
+  color: var(--global-gray-color-300);
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  width: 48px;
+}
+
+.quantity-input::-webkit-outer-spin-button, .quantity-input::-webkit-inner-spin-button {
+  appearance: none;
+  margin: 0;
+}

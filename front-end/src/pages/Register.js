@@ -2,6 +2,12 @@ import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { requestRegister } from '../services/request';
 
+import '../styles/pages/Register.css';
+
+import lineBackground2 from '../images/lineBackground2.svg';
+import logoGaze from '../images/logoGaze.svg';
+import photoRegister from '../images/photoRegister.png';
+
 function Register() {
   const history = useHistory();
 
@@ -65,60 +71,89 @@ function Register() {
   if (userRole === 'seller') redirect('seller/orders');
   if (userRole === 'administrator') redirect('admin/manage');
   return (
-    <div>
-      <h2>Register</h2>
-      <label htmlFor="name">
-        Name
-        <input
-          data-testid="common_register__input-name"
-          type="text"
-          id="name"
-          name="name"
-          value={ name }
-          onChange={ handleName }
-        />
-      </label>
-      <label htmlFor="email">
-        Email
-        <input
-          data-testid="common_register__input-email"
-          type="text"
-          id="email"
-          name="email"
-          value={ email }
-          onChange={ handleEmail }
-        />
-      </label>
+    <div className="register-page-container">
+      <img
+        className="register-line-background"
+        alt="Detalhes amarelos do fundo da tela"
+        src={ lineBackground2 }
+      />
 
-      <label htmlFor="password">
-        Senha
-        <input
-          data-testid="common_register__input-password"
-          type="password"
-          id="password"
-          name="password"
-          value={ password }
-          onChange={ handlePassword }
+      <div className="register-content">
+        <img
+          alt="logo"
+          src={ logoGaze }
         />
-      </label>
 
-      {
-        (failedTryRegister)
-          ? (
-            <p data-testid="common_register__element-invalid_register">
-              O endereço de e-mail ja possui cadastro.
-            </p>
-          )
-          : null
-      }
-      <button
-        onClick={ (event) => register(event) }
-        disabled={ formValidation() }
-        type="button"
-        data-testid="common_register__button-register"
-      >
-        Register
-      </button>
+        <div className="title-and-description-register">
+          <h3 className="title-register">Cadastre-se</h3>
+          <p>
+            Com apenas alguns cliques, você poderá comprar suas cervejas
+            favoritas e recebê-las diretamente na sua casa,
+            em qualquer lugar do país
+          </p>
+        </div>
+
+        <div className="register-input-container">
+          <input
+            data-testid="common_register__input-name"
+            type="text"
+            id="name"
+            name="name"
+            className="input"
+            placeholder="Insira seu nome completo"
+            value={ name }
+            onChange={ handleName }
+          />
+
+          <input
+            data-testid="common_register__input-email"
+            type="text"
+            id="email"
+            name="email"
+            className="input"
+            placeholder="Insira seu email"
+            value={ email }
+            onChange={ handleEmail }
+          />
+
+          <input
+            data-testid="common_register__input-password"
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Insira sua senha"
+            className="input"
+            value={ password }
+            onChange={ handlePassword }
+          />
+        </div>
+
+        {
+          (failedTryRegister)
+            ? (
+              <p data-testid="common_register__element-invalid_register">
+                O endereço de e-mail ja possui cadastro.
+              </p>
+            )
+            : null
+        }
+        <button
+          onClick={ (event) => register(event) }
+          disabled={ formValidation() }
+          type="button"
+          className="primary-button register-button"
+          data-testid="common_register__button-register"
+        >
+          Criar conta
+        </button>
+      </div>
+
+      <img
+        className="register-background-image"
+        alt="Foto da cerveja caindo no copo"
+        src={ photoRegister }
+      />
+
     </div>
   );
 }
