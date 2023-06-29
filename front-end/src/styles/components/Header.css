@@ -1,0 +1,60 @@
+header {
+  align-items: center;
+  background-color: var(--global-gray-color-800);
+  border-bottom: solid 2px var(--global-gray-color-700);
+  display: flex;
+  height: 104px;
+  padding: 24px 112px;
+}
+
+.header-content {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  width: 100vw;
+}
+
+.header-nav {
+  align-items: center;
+  display: flex;
+  gap: 48px;
+}
+
+.logo-gaze {
+  width: 150px;
+}
+
+.header-username {
+  color: var(--global-primary-color-medium);
+}
+
+.header-right-side-content {
+  align-items: center;
+  display: flex;
+  gap: 48px;
+}
+
+.header-loggout-button {
+  width: 176px;
+}
+
+.header-cart-icon {
+  background-color: transparent;
+  border-style: none;
+  cursor: pointer;
+  position: relative;
+}
+
+.header-cart-badge {
+  align-items: center;
+  background-color: var(--global-primary-color-medium);
+  border-radius: 50%;
+  color: var(--global-gray-color-50);
+  display: flex;
+  height: 20px;
+  justify-content: center;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 20px;
+}

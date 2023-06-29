@@ -1,0 +1,57 @@
+.register-page-container {
+  display: flex;
+  justify-content: end;
+  margin: 4em 150px;
+}
+
+.register-content {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  width: 590px;
+}
+
+.register-line-background {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 350px;
+}
+
+.register-content img {
+  width: 280px;
+}
+
+.title-and-description-register {
+  display: flex;
+  flex-direction: column;
+  width: 480px;
+}
+
+
+.title-register {
+  color: var(--global-gray-color-300);
+}
+
+.register-page-container p {
+  color: var(--global-gray-color-500);
+}
+
+.register-input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.register-button {
+  font-size: 1.5rem;
+  width: 490px;
+}
+
+.register-background-image {
+  height: 100vh;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 575px;
+}

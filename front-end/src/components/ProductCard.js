@@ -2,6 +2,11 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import replaceDotToComma from '../utils/replaceDotToComma';
 
+import addIcon from '../images/addIcon.svg';
+import removeIcon from '../images/removeIcon.svg';
+
+import '../styles/components/ProductCard.css';
+
 const ROUTE = 'customer_products';
 const ELEMENT = 'element-card';
 const IMAGE = 'img-card';
@@ -41,43 +46,61 @@ export default function ProductCard({
   };
 
   return (
-    <div>
-      <h3
-        data-testid={ `${ROUTE}__${ELEMENT}-title-${id}` }
-      >
-        { name }
-      </h3>
-      <span
-        data-testid={ `${ROUTE}__${ELEMENT}-price-${id}` }
-      >
-        { replaceDotToComma(price) }
-      </span>
+    <div className="product-card-container">
+      <div className="product-card-price-tag-container">
+        <div
+          className="product-card-price-tag"
+          data-testid={ `${ROUTE}__${ELEMENT}-price-${id}` }
+        >
+          { `R$ ${replaceDotToComma(price)}` }
+        </div>
+      </div>
       <img
+        className="product-card-image"
         data-testid={ `${ROUTE}__${IMAGE}-bg-image-${id}` }
         src={ urlImage }
         alt={ name }
       />
-      <button
-        data-testid={ `${ROUTE}__${BUTTON}-rm-item-${id}` }
-        type="button"
-        onClick={ decrementQuantity }
+      <p
+        data-testid={ `${ROUTE}__${ELEMENT}-title-${id}` }
       >
-        -
-      </button>
-      <input
-        data-testid={ `${ROUTE}__${INPUT}-quantity-${id}` }
-        type="number"
-        name="quantity"
-        value={ quantity }
-        onChange={ handleChangeQuantity }
-      />
-      <button
-        data-testid={ `${ROUTE}__${BUTTON}-add-item-${id}` }
-        type="button"
-        onClick={ incrementQuantity }
-      >
-        +
-      </button>
+        { name }
+      </p>
+
+      <div className="quantity-div-content">
+        <button
+          className="quantity-button"
+          data-testid={ `${ROUTE}__${BUTTON}-rm-item-${id}` }
+          type="button"
+          onClick={ decrementQuantity }
+        >
+          <img
+            className="quantity-icon"
+            alt="Ícone de remover"
+            src={ removeIcon }
+          />
+        </button>
+        <input
+          className="quantity-input"
+          data-testid={ `${ROUTE}__${INPUT}-quantity-${id}` }
+          type="number"
+          name="quantity"
+          value={ quantity }
+          onChange={ handleChangeQuantity }
+        />
+        <button
+          className="quantity-button"
+          data-testid={ `${ROUTE}__${BUTTON}-add-item-${id}` }
+          type="button"
+          onClick={ incrementQuantity }
+        >
+          <img
+            className="quantity-icon"
+            alt="Ícone de adicionar"
+            src={ addIcon }
+          />
+        </button>
+      </div>
     </div>
   );
 }

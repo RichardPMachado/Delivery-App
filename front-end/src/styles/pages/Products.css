@@ -1,0 +1,16 @@
+.page-product-title {
+  color: var(--global-gray-color-300);
+}
+
+.products-cards-container {
+  column-gap: 32px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(256px, 1fr));
+  row-gap: 32px;
+}
+
+.cart-button {
+  display: none;
+  width: 300px;
+}
+

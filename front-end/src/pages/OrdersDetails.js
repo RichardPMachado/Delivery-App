@@ -1,14 +1,26 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import PropTypes from 'prop-types';
 import { requestSaleById, attSale } from '../services/request';
+import DetailsTable from '../components/DetailsTable';
+import Header from '../components/Header';
+
+import lineBackground3 from '../images/lineBackground3.svg';
+import lineBackground4 from '../images/lineBackground4.svg';
+import lineBackground5 from '../images/lineBackground5.svg';
+
+import '../styles/pages/OrdersDetails.css';
+import Footer from '../components/Footer';
+
+const SELLER_NAME = 'order-details-label-seller-name';
+
+const DATA_TEST_ID_SELLER_NAME = `customer_order_details__element-${SELLER_NAME}`;
 
 function OrdersDetails({ match: { params: { id } } }) {
   const userLocalStorage = JSON.parse(localStorage.getItem('user'));
   const history = useHistory();
-  /* const path = window.location.pathname.split('/'); */
   const [sale, setSale] = useState();
 
   const status = sale && sale.sale && sale.sale.status;
@@ -21,9 +33,6 @@ function OrdersDetails({ match: { params: { id } } }) {
   const inPrepair = 'Preparando';
   const delivered = 'Entregue';
   const pending = 'Pendente';
-
-  const ROUTE = 'customer_products';
-  const ELEMENT = 'element-navbar';
   const data = 'customer_order_details__element-order-details-label-delivery-status';
 
   const buttonDeliveredValidate = (() => {
@@ -57,11 +66,6 @@ function OrdersDetails({ match: { params: { id } } }) {
     return () => clearInterval(interval);
   }, []);
 
-  const logout = () => {
-    localStorage.removeItem('user');
-    history.push('/login');
-  };
-
   const redirect = (pathName) => {
     history.push(`/${pathName}`);
   };
@@ -76,140 +80,99 @@ function OrdersDetails({ match: { params: { id } } }) {
     }
   }, []);
 
+  const renderSellerName = () => (
+    <div
+      className="order-information-seller-name-container"
+    >
+      <span
+        className="order-information-seller-name-title"
+      >
+        Vendedor:
+      </span>
+      <span
+        className="order-information-seller-name"
+        data-testid={ DATA_TEST_ID_SELLER_NAME }
+      >
+        {sale && sale.seller.name}
+      </span>
+    </div>
+  );
+
+  const renderOrderDate = () => (
+    <div
+      className="order-information-order-date-container"
+    >
+      <span
+        className="order-information-order-date-title"
+      >
+        Vendedor:
+      </span>
+      <span
+        className="order-information-order-date"
+        data-testid="customer_order_details__element-order-details-label-order-date"
+      >
+        {!!date && date}
+      </span>
+    </div>
+  );
+
   return (
     <>
-      <nav>
-        <Link
-          data-testid={ `${ROUTE}__${ELEMENT}-link-products` }
-          to="/customer/products"
-        >
-          Produtos
-        </Link>
-        <Link
-          data-testid={ `${ROUTE}__${ELEMENT}-link-orders` }
-          to="/customer/orders"
-        >
-          Meus Pedidos
-        </Link>
-        <span data-testid={ `${ROUTE}__${ELEMENT}-user-full-name` }>
-          { userLocalStorage && userLocalStorage.name }
-        </span>
-        <Link
-          to="/login"
-          data-testid={ `${ROUTE}__${ELEMENT}-link-logout` }
-          onClick={ logout }
-        >
-          Sair
-        </Link>
-      </nav>
-      <br />
-      <br />
-      <label htmlFor="sale_information">
-        <section id="sale_information">
-          <span
-            data-testid="customer_order_details__element-order-details-label-order-id"
-          >
-            Pedido
-            {id}
-          </span>
-          <br />
-          <br />
-          <span
-            data-testid="customer_order_details__element-order-details-label-seller-name"
-          >
-            {sale && sale.seller.name}
-          </span>
-          <br />
-          <br />
-          <span
-            data-testid="customer_order_details__element-order-details-label-order-date"
-          >
-            {!!date && date}
-          </span>
-          <br />
-          <br />
-          <span
-            data-testid={ data }
-          >
-            {status}
-          </span>
-        </section>
-      </label>
-      <button
-        type="button"
-        data-testid="customer_order_details__button-delivery-check"
-        onClick={ (event) => attSaleDelivered(event) }
-        disabled={ buttonDeliveredValidate() }
-      >
-        Marcar Como Entregue
+      <Header isProductPage={ false } />
+      <main className="main-order-details">
+        <img
+          className="product-line-background-3"
+          alt="Detalhes amarelos do fundo da tela"
+          src={ lineBackground3 }
+        />
 
-      </button>
-      <table border="1">
-        <thead>
-          <tr>
-            <th>Item</th>
-            <th>Descrição</th>
-            <th>Quantidade</th>
-            <th>Valor Unitario</th>
-            <th>Sub-Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          {sale && sale.salesProducts && sale.salesProducts.map((product, i) => (
-            <tr key={ i + 1 }>
-              <td
-                data-testid={
-                  `customer_order_details__element-order-table-item-number${i}`
-                }
-              >
-                {i + 1}
-              </td>
-              <td
-                data-testid={ `customer_order_details__element-order-table-name-${i}` }
-              >
-                {sale && (sale.products.filter((p) => {
-                  const matchProduct = p.id === product.productId;
-                  return matchProduct;
-                }))[0].name}
-              </td>
-              <td
-                data-testid={ `customer_order_details__element-order-table-quantity${i}` }
-              >
-                { product.quantity }
-              </td>
-              <td
-                data-testid={
-                  `customer_order_details__element-order-table-unit-price${i}`
-                }
-              >
-                {(sale.products.filter((p) => {
-                  const matchProduct = p.id === product.productId;
-                  return matchProduct;
-                }))[0].price.replace('.', ',')}
-              </td>
-              <td
-                data-testid={
-                  `customer_order_details__element-order-table-sub-total-${i}`
-                }
-              >
-                {
-                  (product.quantity * (sale.products.filter((p) => {
-                    const matchProduct = p.id === product.productId;
-                    return matchProduct;
-                  }))[0].price).toFixed(2).toString().replace('.', ',')
-                }
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <div
-        data-testid="customer_order_details__element-order-total-price"
-      >
-        {(sale && sale.sale && sale.sale.totalPrice
-        && sale.sale.totalPrice) ? sale.sale.totalPrice.replace('.', ',') : ''}
+        <img
+          className="product-line-background-4"
+          alt="Detalhes amarelos do fundo da tela"
+          src={ lineBackground4 }
+        />
 
-      </div>
+        <img
+          className="product-line-background-5"
+          alt="Detalhes amarelos do fundo da tela"
+          src={ lineBackground5 }
+        />
+        <h2 className="page-yellow-title">Detalhes do Pedido</h2>
+        <div className="sale-information-container">
+          <div className="order-information-container">
+            <span
+              className="order-information-order-id"
+              data-testid="customer_order_details__element-order-details-label-order-id"
+            >
+              {`Pedido ${id}`}
+            </span>
+            { renderSellerName() }
+            { renderOrderDate() }
+
+          </div>
+
+          <div className="order-details-status-container">
+            <span
+              className="order-details-status"
+              data-testid={ data }
+            >
+              {status}
+            </span>
+            <button
+              className="primary-button"
+              type="button"
+              data-testid="customer_order_details__button-delivery-check"
+              onClick={ (event) => attSaleDelivered(event) }
+              disabled={ buttonDeliveredValidate() }
+            >
+              Marcar Como Entregue
+            </button>
+          </div>
+        </div>
+        <DetailsTable sale={ sale } />
+      </main>
+
+      <Footer />
     </>
   );
 }
