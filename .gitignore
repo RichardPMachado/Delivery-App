@@ -291,6 +291,7 @@ $RECYCLE.BIN/
 node_modules
 report-*.log
 .env
+db
 front-end/.env
 back-end/.env
 */**/.env
